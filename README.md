@@ -2,7 +2,9 @@
 
 Aplicación web estática para estimar, documentar y comparar costos de consumo de APIs de modelos de inteligencia artificial. Permite trabajar con tarifas documentadas o personalizadas, cargar proyectos en distintos formatos, convertir resultados a otras monedas, evaluar presupuesto y descargar informes adaptados a una audiencia y temática.
 
-> **Estado de publicación:** publicado y validado en GitHub Pages el 16 de octubre de 2026.
+- **Calculadora publicada:** https://melyzavala.github.io/ai-tools-TokenIA-MelisaZavala/
+- **Repositorio público:** https://github.com/melyzavala/ai-tools-TokenIA-MelisaZavala
+- **Estado de validación:** aprobado con reservas documentadas y publicado
 
 ## Propósito
 
