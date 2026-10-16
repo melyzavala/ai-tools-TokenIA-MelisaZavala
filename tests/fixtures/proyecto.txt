@@ -1,0 +1,5 @@
+Datos sintéticos para una prueba de contenido no estructurado.
+
+Analiza una reseña de cliente y determina si el tono es positivo, neutral o negativo. Explica brevemente la clasificación y sugiere una respuesta respetuosa. La reseña indica que el producto funciona bien, pero la entrega llegó dos días tarde.
+
+Este archivo no contiene encabezados Input ni Output. La calculadora debería usar el nombre del archivo como título y tratar todo el contenido como input.

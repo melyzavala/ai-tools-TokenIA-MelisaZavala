@@ -1,0 +1,6 @@
+proyecto: Prueba YAML
+audiencia: Dirección
+volumen: 2500
+presupuesto: 100
+input: Clasifica solicitudes.
+output: Devuelve categoría y prioridad.

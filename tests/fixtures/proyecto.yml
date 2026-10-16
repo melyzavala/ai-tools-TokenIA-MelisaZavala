@@ -1,0 +1,6 @@
+project: Prueba YML
+audience: Cliente
+volume: 2500
+budget: 100
+input: Clasifica solicitudes.
+output: Devuelve categoría y prioridad.

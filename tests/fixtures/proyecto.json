@@ -1,0 +1,8 @@
+{
+  "proyecto": "Clasificación automática de solicitudes",
+  "audience": "Dirección de Operaciones",
+  "llamadas": 12500,
+  "presupuesto": 250,
+  "input": "Clasifica la solicitud en una categoría operativa y devuelve prioridad, área responsable y una respuesta breve. Solicitud: necesito cambiar la fecha de entrega de mi pedido.",
+  "output": "Categoría: logística. Prioridad: media. Área responsable: distribución. Respuesta: podemos revisar una nueva fecha de entrega; comparte el número de pedido y la fecha solicitada."
+}

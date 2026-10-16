@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proyecto><titulo>Prueba XML</titulo><audiencia>Equipo técnico</audiencia><volumen>2500</volumen><presupuesto>100</presupuesto><input>Clasifica solicitudes.</input><output>Devuelve categoría y prioridad.</output></proyecto>
