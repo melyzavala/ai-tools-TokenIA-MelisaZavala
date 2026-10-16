@@ -1,0 +1,5 @@
+Intención: modificar la dirección de entrega de varios pedidos.
+Prioridad: media, porque las entregas están programadas para la próxima semana.
+Área responsable: logística y atención al cliente.
+Siguiente acción: solicitar los cinco números de pedido, la nueva dirección completa y la confirmación de la zona de cobertura. Después, validar disponibilidad y posibles ajustes de costo antes de confirmar el cambio.
+Datos pendientes: números de pedido, dirección completa y cobertura de la nueva ubicación.
