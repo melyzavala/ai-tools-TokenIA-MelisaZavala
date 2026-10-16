@@ -1,0 +1,1917 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de Costos de IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #172033;
+      --ink-soft: #526176;
+      --steel: #3f6075;
+      --steel-dark: #2a4354;
+      --wolf: #9eabb5;
+      --paper: #f7f8fa;
+      --surface: #ffffff;
+      --line: #dce3e8;
+      --gold: #b88a44;
+      --gold-pale: #f6eddf;
+      --danger: #b33a3a;
+      --danger-pale: #fff1f0;
+      --success: #24705e;
+      --success-pale: #e8f4f0;
+      --shadow: 0 12px 32px rgba(23, 32, 51, .09);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Poppins", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 84% 20%, rgba(184,138,68,.38), transparent 26rem),
+        linear-gradient(122deg, #172033 0%, #243c4d 55%, #31576b 100%);
+      color: white;
+      min-height: 270px;
+      padding: 34px clamp(20px, 5vw, 78px) 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .winter-scene { position: absolute; inset: auto 0 0; width: 100%; height: 128px; opacity: .46; pointer-events: none; }
+    .winter-scene .ridge { fill: rgba(12,25,37,.43); stroke: rgba(213,229,237,.32); stroke-width: 1.1; }
+    .winter-scene .wall { fill: rgba(10,20,31,.72); }
+    .snowfield { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .snowfield i { position: absolute; top: -10px; width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,.75); animation: snowfall linear infinite; }
+    .snowfield i:nth-child(1){left:8%;animation-duration:10s;animation-delay:-2s}.snowfield i:nth-child(2){left:18%;animation-duration:14s;animation-delay:-9s}.snowfield i:nth-child(3){left:29%;animation-duration:9s;animation-delay:-4s}.snowfield i:nth-child(4){left:41%;animation-duration:15s;animation-delay:-6s}.snowfield i:nth-child(5){left:53%;animation-duration:11s;animation-delay:-8s}.snowfield i:nth-child(6){left:64%;animation-duration:13s;animation-delay:-3s}.snowfield i:nth-child(7){left:76%;animation-duration:9s;animation-delay:-7s}.snowfield i:nth-child(8){left:89%;animation-duration:16s;animation-delay:-11s}
+    @keyframes snowfall { to { transform: translate3d(18px, 295px, 0); opacity: .15; } }
+    .topline, .hero-copy, .wrap { max-width: 1240px; margin: 0 auto; position: relative; z-index: 1; }
+    .topline { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .02em; }
+    .sigil { width: 36px; height: 40px; display: grid; place-items: center; color: #e9c98e; filter: drop-shadow(0 3px 8px rgba(0,0,0,.25)); }
+    .sigil svg { width: 100%; height: 100%; }
+    .status-pill { color: #e7eef2; font-size: 12px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 6px 10px; }
+    .hero-copy { margin-top: 42px; }
+    .eyebrow { text-transform: uppercase; font-weight: 700; color: #e9c98e; letter-spacing: .14em; font-size: 11px; margin: 0 0 8px; }
+    h1 { margin: 0; font-size: clamp(30px, 4vw, 52px); letter-spacing: -.035em; line-height: 1.08; max-width: 850px; }
+    .hero p:not(.eyebrow) { max-width: 720px; color: #d5e0e6; margin: 16px 0 0; font-size: 16px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .hero-actions button { background: #f5e7cf; color: #243c4d; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+    .hero-actions button:hover { background: white; }
+
+    .wrap { padding: 30px clamp(16px, 4vw, 58px) 56px; }
+    .section-nav { max-width: 1240px; margin: 0 auto; padding: 10px clamp(16px, 4vw, 58px); display: flex; gap: 8px; overflow-x: auto; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+    .section-nav a { color: var(--steel-dark); text-decoration: none; white-space: nowrap; font-weight: 700; font-size: 12px; padding: 8px 11px; border-radius: 999px; }
+    .section-nav a:hover, .section-nav a:focus-visible { background: #e9f0f4; outline: 2px solid transparent; }
+    .snapshot { display:flex; gap:7px; min-width:0; overflow:hidden; }
+    .snapshot span { min-width:0; padding:5px 8px; border:1px solid #d6e0e5; border-radius:999px; background:#fff; color:var(--ink-soft); font-size:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .snapshot b { color:var(--ink); }
+    .module-head { display:flex; justify-content:space-between; gap:14px; align-items:center; }
+    .module-head > div { min-width:0; }
+    .module-toggle { flex:0 0 auto; padding:7px 10px; font-size:9px; }
+    .file-guide-row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:8px; color:var(--ink-soft); font-size:9px; }
+    .file-guide { position:relative; }
+    .file-guide > summary { display:flex; align-items:center; gap:6px; min-height:30px; padding:5px 10px; border:1px solid #9fb2bd; border-radius:999px; background:#f7fafb; color:var(--steel-dark); cursor:pointer; list-style:none; font-weight:800; white-space:nowrap; }
+    .file-guide > summary::-webkit-details-marker { display:none; }
+    .file-guide-panel { position:absolute; z-index:20; top:35px; right:0; width:min(440px,calc(100vw - 48px)); padding:13px 14px; border:1px solid #b9c9d1; border-radius:9px; background:#fff; box-shadow:0 14px 30px rgba(23,32,51,.18); color:var(--ink-soft); font-size:10px; line-height:1.55; }
+    .file-guide-panel strong { display:block; margin-bottom:5px; color:var(--ink); font-size:11px; }
+    .file-guide-panel p { margin:0; }
+    .notice { margin: -25px 0 28px; position: relative; z-index: 2; background: var(--gold-pale); border-left: 4px solid var(--gold); padding: 13px 16px; border-radius: 6px; color: #5f4926; font-size: 13px; box-shadow: 0 5px 17px rgba(23,32,51,.07); }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(350px, .78fr); gap: 24px; align-items: start; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 2px 8px rgba(23,32,51,.035); overflow: hidden; }
+    #project-section { overflow:visible; }
+    .card-head { padding: 20px 22px 16px; border-bottom: 1px solid var(--line); }
+    .card-head h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .complexity-badge { display:inline-flex; align-items:center; margin-left:8px; padding:3px 7px; border:1px solid currentColor; border-radius:999px; vertical-align:middle; font-size:8px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+    .complexity-badge.essential { color:#176552; background:#eaf7f2; }
+    .complexity-badge.optional { color:#75551d; background:#fff6df; }
+    .complexity-badge.advanced { color:#4f478a; background:#f0edff; }
+    .card-head p { color: var(--ink-soft); margin: 4px 0 0; font-size: 13px; }
+    .card-body { padding: 20px 22px 22px; }
+    .stack { display: grid; gap: 20px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    .field { display: grid; gap: 7px; align-content: start; min-width: 0; }
+    label { font-weight: 600; font-size: 12px; color: #314258; }
+    label small { color: var(--ink-soft); font-weight: 400; }
+    input, select, textarea, button { font: inherit; }
+    input, select, textarea {
+      width: 100%; border: 1px solid #cbd5dd; border-radius: 8px; padding: 10px 11px; color: var(--ink); background: white; outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .field > input:not([type="checkbox"]):not([type="file"]), .field > select { min-height: 46px; height: 46px; }
+    textarea { min-height: 118px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: var(--steel); box-shadow: 0 0 0 3px rgba(63,96,117,.13); }
+    input[readonly] { background: #f2f5f7; color: #4c5b6e; }
+    .source-panel { display: grid; gap: 8px; padding: 12px; background: #f7fafb; border: 1px solid var(--line); border-radius: 9px; }
+    .source-panel a { color: var(--steel-dark); font-weight: 700; }
+    .source-panel p { margin: 0; color: var(--ink-soft); font-size: 11px; }
+    .inline-note { color: var(--ink-soft); font-size: 11px; margin: 0; }
+    .fx-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
+    .fx-status { color: var(--ink-soft); font-size: 11px; margin: 0; }
+    .auto-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--wolf); margin-right: 6px; }
+    .status-dot.ok { background: var(--success); }
+    .status-dot.wait { background: var(--gold); }
+    .status-dot.error { background: var(--danger); }
+    .field-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .upload {
+      border: 1px dashed #9babb7; background: #f9fbfc; color: var(--steel-dark); border-radius: 8px; padding: 8px 10px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+    }
+    .upload input { display: none; }
+    .token-line { min-height: 22px; color: var(--ink-soft); font-size: 12px; }
+    .project-meta-row { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+    .project-file-field { gap: 6px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; }
+    .project-file-field > label:first-child { margin-bottom: 1px; }
+    .project-file-field .upload { width: 100%; min-height: 40px; justify-content: center; padding: 8px 12px; background: white; }
+    .project-file-field .token-line { min-height: auto; line-height: 1.35; }
+    .file-status { display:flex; align-items:flex-start; gap:7px; padding:8px 10px; border:1px solid transparent; border-radius:8px; }
+    .file-status[data-state="error"] { color:#8a2e27; background:#fff1ef; border-color:#efc4bf; }
+    .file-status[data-state="success"] { color:#245c4b; background:#eef8f3; border-color:#bfdfd1; }
+    .file-status[data-state="loading"] { color:#76531e; background:#fff8e9; border-color:#ead39d; }
+    .project-file-field .check { align-items: flex-start; line-height: 1.35; }
+    .project-file-field .inline-note { line-height: 1.4; }
+    .token-line strong { color: var(--steel-dark); }
+    .manual-tokens { display: none; grid-template-columns: 1fr 1fr; gap: 12px; background: #f7fafb; border-radius: 8px; padding: 12px; }
+    .manual-tokens.active { display: grid; }
+    .check { display: flex; align-items: center; gap: 7px; color: var(--ink-soft); font-size: 12px; cursor: pointer; }
+    .check input { width: 15px; height: 15px; accent-color: var(--steel); }
+    .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    button { border: 0; border-radius: 8px; cursor: pointer; padding: 11px 14px; font-weight: 700; transition: transform .15s, box-shadow .15s, background .15s; }
+    button:hover { transform: translateY(-1px); }
+    button:focus-visible, a:focus-visible { outline: 3px solid rgba(184,138,68,.48); outline-offset: 2px; }
+    .primary { color: white; background: var(--steel-dark); box-shadow: 0 5px 12px rgba(42,67,84,.22); }
+    .secondary { color: var(--steel-dark); background: #e9f0f4; }
+    .subhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .subhead h3 { margin: 0; font-size: 14px; }
+    .muted { color: var(--ink-soft); font-size: 12px; }
+    .control-deck { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; margin: 0 0 24px; padding: 16px 18px; border: 1px solid #bdc9d0; border-radius: 11px; background: linear-gradient(135deg, #fff, #eef3f5); box-shadow: var(--shadow); }
+    .mode-title { margin: 0 0 8px; font-size: 12px; font-weight: 800; color: var(--steel-dark); text-transform: uppercase; letter-spacing: .06em; }
+    .mode-switch { display: inline-grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 9px; background: #dfe7eb; }
+    .mode-option { position: relative; cursor: pointer; }
+    .mode-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .mode-option span { display: block; padding: 8px 13px; border-radius: 7px; color: #526176; font-size: 12px; font-weight: 800; }
+    .mode-option input:checked + span { color: white; background: var(--steel-dark); box-shadow: 0 3px 8px rgba(42,67,84,.22); }
+    .mode-option input:focus-visible + span { outline: 3px solid rgba(184,138,68,.48); }
+    .mode-description { margin: 8px 0 0; color: var(--ink-soft); font-size: 11px; }
+    .control-deck > div:first-child { display: grid; justify-items: start; text-align: left; }
+    .project-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; max-width: 560px; }
+    .project-actions button { padding: 9px 11px; font-size: 11px; }
+    .comparison-project-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:12px 0 16px; padding:9px 10px; border:1px solid #d4dee3; border-radius:9px; background:#f7fafb; }
+    .comparison-project-toolbar .compact-action, .comparison-report-action .compact-action { min-height:36px; padding:8px 12px; font-size:10px; }
+    .comparison-project-toolbar .check { margin:0 4px; }
+    .comparison-project-toolbar .project-help summary { width:34px; height:34px; }
+    .comparison-report-action { display:flex; justify-content:flex-end; margin-top:14px; }
+    .save-status { flex-basis: 100%; text-align: right; color: var(--ink-soft); font-size: 10px; }
+    .project-help { position: relative; }
+    .project-help summary { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #bdcbd3; border-radius: 50%; color: var(--steel-dark); background: #eef3f6; cursor: pointer; font-weight: 800; list-style: none; }
+    .project-help summary::-webkit-details-marker { display: none; }
+    .project-help summary:focus-visible { outline: 3px solid rgba(184,138,68,.45); }
+    .project-help-panel { position: absolute; z-index: 8; top: 42px; right: 0; width: min(360px,80vw); padding: 14px 16px; border: 1px solid #bdcbd3; border-radius: 10px; background: #fff; box-shadow: 0 14px 34px rgba(20,38,50,.18); }
+    .project-help-panel strong { display: block; margin-bottom: 8px; }
+    .project-help-panel dl { margin: 0; font-size: 10px; }
+    .project-help-panel dt { margin-top: 7px; color: var(--ink); font-weight: 800; }
+    .project-help-panel dd { margin: 2px 0 0; color: var(--ink-soft); }
+    .mini-help { margin: 10px 0 14px; border: 1px solid #d3dde2; border-radius: 8px; background: #f7fafb; }
+    .mini-help summary { padding: 10px 12px; cursor: pointer; color: var(--steel-dark); font-size: 11px; font-weight: 800; }
+    .mini-help p { margin: 0; color: var(--ink-soft); font-size: 10px; }
+    .mini-help-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; padding: 0 12px 12px; }
+    .mini-help-step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 9px; align-items: center; min-width: 0; padding: 10px; border: 1px solid #d7e0e5; border-radius: 8px; background: #fff; }
+    .mini-help-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--steel-dark); color: #fff; font-size: 15px; font-weight: 800; box-shadow: inset 0 0 0 2px rgba(255,255,255,.16); }
+    .mini-help-step strong, .mini-help-step small { display: block; }
+    .mini-help-step strong { color: var(--ink); font-size: 10px; line-height: 1.25; }
+    .mini-help-step small { margin-top: 3px; color: var(--ink-soft); font-size: 9px; line-height: 1.35; }
+    .mini-help-warning { display: flex; gap: 8px; align-items: flex-start; margin: 0 12px 12px !important; padding: 9px 10px; border-left: 3px solid var(--gold); background: #fff8eb; }
+    .mini-help-warning b { color: #755525; }
+    .demo-notice { display: flex; gap: 10px; align-items: center; margin: 14px 0 2px; padding: 10px 12px; border: 1px solid #c79b55; border-radius: 8px; background: #fff8eb; color: #624a28; }
+    .demo-notice[hidden] { display: none; }
+    .demo-notice-icon { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; background: #b88a44; color: #fff; font-weight: 800; }
+    .demo-notice strong, .demo-notice small { display: block; }
+    .demo-notice small { margin-top: 2px; line-height: 1.35; }
+    body.mode-auto .manual-only { display: none !important; }
+    body.mode-manual .auto-only { display: none !important; }
+    body.mode-manual .project-meta-row { grid-template-columns: 1fr; }
+    .budget-panel { padding: 13px; border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; }
+    .budget-progress { height: 10px; margin-top: 9px; overflow: hidden; border-radius: 99px; background: #dfe7eb; }
+    .budget-progress span { display: block; width: 0; height: 100%; background: var(--success); transition: width .25s; }
+    .budget-progress span.warn { background: var(--gold); }
+    .budget-progress span.over { background: var(--danger); }
+    .insight { margin-top: 12px; padding: 12px; border: 1px solid #d8c49f; border-radius: 9px; background: #fff9ed; color: #5f4926; font-size: 12px; }
+    .insight strong { display: block; margin-bottom: 3px; }
+    .quick-guide { margin: 0 0 24px; border: 1px solid #c9d1d6; border-radius: 11px; background: white; box-shadow: 0 7px 20px rgba(24,36,47,.07); overflow: hidden; }
+    .quick-guide summary { cursor: pointer; padding: 14px 18px; color: var(--steel-dark); font-size: 13px; font-weight: 800; list-style: none; }
+    .quick-guide summary::-webkit-details-marker { display: none; }
+    .quick-guide summary::after { content: '+'; float: right; font-size: 18px; }
+    .quick-guide[open] summary::after { content: '−'; }
+    .guide-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 18px 18px; }
+    .guide-step { position: relative; min-width: 0; padding: 12px; border-radius: 9px; background: #f3f7f9; border: 1px solid var(--line); }
+    .guide-step b { display: block; color: var(--steel-dark); font-size: 12px; }
+    .guide-step span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: 10px; }
+    .guide-step .guide-number { width: 34px; height: 34px; margin: 0 0 9px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--steel-dark); font-size: 17px; font-weight: 800; line-height: 1; box-shadow: 0 4px 9px rgba(42,67,84,.2); }
+    .file-preview { display: none; align-items: center; gap: 10px; padding: 9px; border: 1px solid var(--line); border-radius: 8px; background: #f7fafb; }
+    .file-preview.active { display: flex; }
+    .file-preview img { width: 62px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #c7d2d9; }
+    .file-preview div { min-width: 0; color: var(--ink-soft); font-size: 10px; }
+    .file-preview strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); font-size: 11px; }
+    .growth-card { margin-top: 12px; padding: 13px; border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; }
+    .growth-card header { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; margin-bottom: 10px; }
+    .growth-bars { display: grid; gap: 8px; }
+    .growth-row { display: grid; grid-template-columns: 70px 1fr minmax(90px,auto); gap: 8px; align-items: center; font-size: 10px; }
+    .growth-track { height: 9px; overflow: hidden; border-radius: 99px; background: #dfe7eb; }
+    .growth-track span { display: block; height: 100%; background: linear-gradient(90deg,var(--steel),var(--gold)); }
+    .summary .cost-table-wrap { overflow: visible; }
+    .summary table { min-width: 0; table-layout: fixed; }
+    .summary th, .summary td { white-space: normal; overflow-wrap: anywhere; }
+    .summary th:first-child, .summary td:first-child { width: 55%; }
+    .summary th:last-child, .summary td:last-child { width: 45%; text-align: center; font-weight: 700; }
+    .numeric-field input, .numeric-field select { text-align: left; font-variant-numeric: tabular-nums; font-weight: 500; }
+    .field-icon { display: block; line-height: 1.45; }
+    .field-icon::before { display: inline-block; width: 20px; font-size: 15px; line-height: 1; text-align: center; }
+    .icon-volume::before { content: '♟'; }
+    .icon-budget::before { content: '¤'; }
+    .icon-period::before { content: '◷'; }
+    .icon-growth::before { content: '↗'; }
+    .icon-horizon::before { content: '▥'; }
+    .budget-panel { align-items: end; }
+    .budget-panel .numeric-field { grid-template-rows: minmax(48px, auto) 46px; }
+    .budget-panel .numeric-field > label { align-self: end; }
+    .budget-panel label small { display: block; margin-left: 24px; margin-top: 2px; }
+    .projection-config { border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; overflow: hidden; }
+    .projection-config summary { cursor: pointer; padding: 13px 14px; font-size: 12px; font-weight: 800; color: var(--steel-dark); list-style: none; }
+    .projection-config summary::-webkit-details-marker { display: none; }
+    .projection-config summary::after { content: '+'; float: right; font-size: 17px; }
+    .projection-config[open] summary::after { content: '−'; }
+    .projection-body { display: grid; gap: 13px; padding: 0 14px 14px; border-top: 1px solid var(--line); }
+    .projection-body > p { margin: 12px 0 0; color: var(--ink-soft); font-size: 11px; }
+    .projection-formula { padding: 9px 11px; border-left: 3px solid var(--gold); background: #fff9ed; color: #5f4926; font-size: 10px; }
+    .projection-panel { align-items: end; }
+    .projection-panel .numeric-field { grid-template-rows: minmax(34px, auto) 46px; }
+    .projection-panel .numeric-field > label { align-self: end; }
+    .volume-panel { display: grid; gap: 12px; padding: 13px; border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; }
+    .volume-panel .split { align-items: end; }
+    .volume-note { margin: 0; color: var(--ink-soft); font-size: 10px; }
+    .economics-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(320px,.8fr); gap: 18px; align-items: start; }
+    .economics-form { display: grid; gap: 14px; }
+    .economics-results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .economics-results .kpi { background: #f7fafb; }
+    .economics-form .split { align-items: start; }
+    .economics-form .split > .field > label { display: flex; align-items: flex-end; min-height: 42px; }
+    .comparison-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .project-slot { padding: 14px; border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; }
+    .project-slot h3 { margin: 0 0 6px; font-size: 14px; }
+    .project-slot p { margin: 3px 0; color: var(--ink-soft); font-size: 11px; }
+    .project-slot strong { color: var(--ink); }
+    .project-slot .slot-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+    .project-slot .slot-actions button { padding: 7px 10px; font-size: 11px; }
+    .project-chart { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: #f7fafb; }
+    .project-chart h4 { margin: 0 0 4px; font-size: 13px; }
+    .chart-note { margin: 0 0 14px; color: var(--ink-soft); font-size: 11px; }
+    .project-bar { display: grid; grid-template-columns: minmax(120px, 220px) minmax(140px, 1fr) minmax(110px, auto); gap: 10px; align-items: center; margin: 10px 0; }
+    .project-bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: 700; }
+    .project-bar-track { height: 16px; overflow: hidden; border-radius: 999px; background: #dfe7eb; }
+    .project-bar-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,var(--steel),var(--gold)); }
+    .project-bar.current .project-bar-fill { background: var(--steel-dark); }
+    .project-bar-value { text-align: right; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .delta-positive { color: var(--success); }
+    .delta-negative { color: var(--danger); }
+
+    .summary { position: sticky; top: 18px; }
+    .summary .card-body { padding-top: 18px; }
+    .result-total { background: linear-gradient(135deg, #172033, #31576b); color: white; padding: 21px; border-radius: 11px; }
+    .result-total p { margin: 0; color: #d1e0e8; font-size: 12px; font-weight: 600; }
+    .result-total output { display: block; margin-top: 4px; font-weight: 800; font-size: clamp(30px, 4vw, 40px); letter-spacing: -.04em; }
+    .result-total small { color: #d1e0e8; }
+    .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+    .kpi { display:flex; flex-direction:column; justify-content:center; min-height:0; border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; }
+    .kpi span { display: block; color: var(--ink-soft); font-size: 11px; font-weight: 600; }
+    .kpi strong { display: block; margin-top: 3px; font-size: 17px; letter-spacing: -.02em; }
+    #budgetCapacity { font-size: clamp(13px,1.1vw,15px); line-height:1.2; white-space:nowrap; }
+    .composition { margin: 18px 0; }
+    .composition header { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-soft); margin-bottom: 7px; }
+    .bar { display: flex; height: 14px; overflow: hidden; background: #e7edf0; border-radius: 99px; }
+    .bar > span { height: 100%; min-width: 0; transition: width .25s; }
+    .input-bar { background: var(--steel); }
+    .output-bar { background: var(--gold); }
+    .fixed-bar { background: var(--danger); }
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; color: var(--ink-soft); font-size: 11px; }
+    .legend i { width: 9px; height: 9px; display: inline-block; border-radius: 50%; margin-right: 4px; }
+    .cost-table-wrap { overflow-x: auto; margin-top: 18px; }
+    table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 12px; }
+    th { color: var(--ink-soft); background: #f4f7f8; text-align: right; font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+    th:first-child, td:first-child { text-align: left; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; white-space: nowrap; }
+    td { text-align: right; font-variant-numeric: tabular-nums; }
+    .audit { margin-top: 17px; border-radius: 9px; padding: 12px; background: var(--success-pale); color: #1f5e4f; font-size: 12px; }
+    .audit.warn { background: var(--danger-pale); color: #863131; }
+    .audit strong { display: block; margin-bottom: 3px; }
+    .footnote { color: var(--ink-soft); font-size: 11px; margin: 14px 0 0; }
+    .northern-oath { margin-top: 26px; display: flex; align-items: center; justify-content: center; gap: 12px; color: #667588; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; }
+    .northern-oath::before, .northern-oath::after { content: ""; height: 1px; width: min(110px, 18vw); background: linear-gradient(90deg, transparent, #aab6bf); }
+    .northern-oath::after { background: linear-gradient(90deg, #aab6bf, transparent); }
+
+    /* Ambientación visual medieval-fantástica: no modifica contenido ni funcionalidad. */
+    body {
+      background-color: #edf1f3;
+      background-image:
+        radial-gradient(circle at 15% 8%, rgba(255,255,255,.95) 0 1px, transparent 2px),
+        radial-gradient(circle at 80% 16%, rgba(255,255,255,.65) 0 1px, transparent 2px),
+        repeating-linear-gradient(115deg, rgba(47,65,77,.025) 0 1px, transparent 1px 9px),
+        linear-gradient(180deg, #f5f7f8, #e8edf0);
+      background-size: 90px 90px, 130px 130px, auto, auto;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      opacity: .13;
+      background-image: repeating-radial-gradient(ellipse at 20% 30%, transparent 0 5px, rgba(24,34,48,.08) 6px, transparent 7px 15px);
+      mix-blend-mode: multiply;
+    }
+    .hero {
+      min-height: 310px;
+      border-bottom: 4px solid #8d6a35;
+      box-shadow: inset 0 -18px 40px rgba(3,11,18,.5), 0 8px 22px rgba(18,30,41,.2);
+      background:
+        radial-gradient(circle at 82% 18%, rgba(222,190,126,.34), transparent 15rem),
+        radial-gradient(ellipse at 50% 108%, rgba(162,196,211,.23), transparent 38rem),
+        linear-gradient(125deg, #0d1622 0%, #1e3443 48%, #31576b 100%);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 108px;
+      height: 108px;
+      right: clamp(24px, 7vw, 110px);
+      top: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 34%, #fff8de 0, #e7d19f 38%, rgba(202,171,110,.28) 62%, transparent 70%);
+      filter: drop-shadow(0 0 25px rgba(226,204,153,.26));
+      opacity: .72;
+    }
+    .winter-scene { height: 150px; opacity: .72; filter: drop-shadow(0 -5px 9px rgba(190,221,233,.08)); }
+    .winter-scene .ridge { fill: rgba(9,21,31,.58); stroke: rgba(218,237,245,.42); }
+    .winter-scene .wall { fill: rgba(4,12,20,.9); }
+    .sigil { width: 44px; height: 48px; color: #f0d49e; }
+    .brand { text-shadow: 0 2px 8px rgba(0,0,0,.45); }
+    .status-pill { background: rgba(9,20,31,.42); box-shadow: inset 0 0 0 1px rgba(233,201,142,.12); }
+    .section-nav {
+      max-width: none;
+      justify-content: center;
+      background: linear-gradient(180deg, #273c49, #1d303c);
+      border-bottom: 1px solid #0e1c25;
+      box-shadow: 0 6px 18px rgba(16,29,39,.18), inset 0 1px rgba(255,255,255,.08);
+    }
+    .section-nav a { color: #edf3f6; border: 1px solid transparent; }
+    .section-nav a:hover, .section-nav a:focus-visible { color: #fff3d7; background: rgba(184,138,68,.18); border-color: rgba(233,201,142,.35); }
+    .notice {
+      border: 1px solid #d8c49f;
+      border-left: 5px solid var(--gold);
+      background: linear-gradient(100deg, #fff9ed, #f6eddf);
+      box-shadow: 0 8px 20px rgba(44,53,60,.1), inset 0 0 30px rgba(184,138,68,.08);
+    }
+    .card {
+      position: relative;
+      border-color: #c9d1d6;
+      border-radius: 10px;
+      box-shadow: 0 10px 24px rgba(24,36,47,.09), inset 0 0 0 1px rgba(255,255,255,.75);
+      background: linear-gradient(150deg, #ffffff 0%, #fbfcfc 72%, #f2f5f6 100%);
+    }
+    .card::before, .card::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      top: 9px;
+      background: radial-gradient(circle at 35% 30%, #f3d7a3, #8a6735 62%, #513b21);
+      box-shadow: 0 1px 2px rgba(0,0,0,.35);
+    }
+    .card::before { left: 10px; }
+    .card::after { right: 10px; }
+    .card-head {
+      background:
+        linear-gradient(90deg, rgba(184,138,68,.12), transparent 30%),
+        linear-gradient(180deg, #f8fafb, #eef2f4);
+      border-bottom: 1px solid #bdc8cf;
+      box-shadow: inset 0 -3px 0 rgba(63,96,117,.08);
+    }
+    .card-head h2 { color: #203644; text-shadow: 0 1px white; }
+    input, select, textarea {
+      border-color: #b9c4cb;
+      background-color: #fffdf8;
+      box-shadow: inset 0 1px 3px rgba(33,48,60,.055);
+    }
+    input:focus, select:focus, textarea:focus { background: #fff; border-color: #8c6a39; box-shadow: 0 0 0 3px rgba(184,138,68,.16), inset 0 1px 2px rgba(33,48,60,.04); }
+    .upload, .source-panel, .manual-tokens { background: linear-gradient(145deg, #f8fafb, #edf2f4); }
+    button { border-radius: 5px; clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px); }
+    .primary { background: linear-gradient(180deg, #3d5d70, #233b4a); border: 1px solid #162a36; box-shadow: inset 0 1px rgba(255,255,255,.15), 0 5px 12px rgba(30,50,63,.25); }
+    .secondary { background: linear-gradient(180deg, #edf3f6, #d8e3e8); border: 1px solid #b7c7d0; }
+    .hero-actions button { border: 1px solid #80602f; background: linear-gradient(180deg, #faeccf, #d9b879); box-shadow: inset 0 1px rgba(255,255,255,.65), 0 7px 18px rgba(0,0,0,.3); }
+    .result-total {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #101d27;
+      border-bottom: 3px solid #a97d3b;
+      background:
+        repeating-linear-gradient(125deg, transparent 0 13px, rgba(255,255,255,.025) 13px 14px),
+        linear-gradient(135deg, #101a27, #294b5e);
+      box-shadow: inset 0 1px rgba(255,255,255,.11), 0 7px 18px rgba(25,42,53,.18);
+    }
+    .result-total::after {
+      content: "";
+      position: absolute;
+      width: 86px;
+      height: 86px;
+      right: -24px;
+      top: -26px;
+      border: 1px solid rgba(233,201,142,.28);
+      transform: rotate(45deg);
+      box-shadow: 0 0 0 9px rgba(233,201,142,.035), 0 0 0 18px rgba(233,201,142,.025);
+    }
+    .kpi { border-color: #cbd4d9; background: rgba(255,255,255,.72); box-shadow: inset 0 0 18px rgba(63,96,117,.035); }
+    th { color: #eef4f6; background: linear-gradient(180deg, #3a5361, #293f4c); }
+    td { background: rgba(255,255,255,.62); }
+    tbody tr:hover td { background: #f9f0df; }
+    .bar { border: 1px solid #bec8ce; box-shadow: inset 0 1px 3px rgba(25,39,49,.14); }
+    .northern-oath { color: #425766; }
+    .comparison-card { margin-top: 24px; }
+    .comparison-controls { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 14px; margin-bottom: 12px; }
+    .project-model-grid { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(260px, 1.2fr); gap: 14px; }
+    .project-name-field { grid-column: 1 / -1; }
+    .project-meta-stack { display: grid; gap: 14px; }
+    .audience-field, .project-file-field { width: 100%; }
+    .upload-group { min-width: 0; padding: 11px; border: 1px solid #ced9df; border-radius: 9px; background: rgba(255,255,255,.72); }
+    .upload-group > strong { display: block; margin-bottom: 8px; font-size: 10px; color: var(--ink); }
+    .upload-group .upload { width: 100%; justify-content: center; }
+    .upload-group-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .audience-note { margin: 7px 0 0; color: var(--ink-soft); font-size: 10px; line-height: 1.4; }
+    .quick-file-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .quick-file-action { min-width: 0; padding: 9px; border: 1px solid #cbd6dc; border-radius: 7px; background: rgba(255,255,255,.7); }
+    .quick-file-action button { width: 100%; padding: 8px 10px; font-size: 10px; }
+    .quick-file-action span { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 9px; overflow-wrap: anywhere; }
+    .custom-rate-help { padding: 11px 13px; border-left: 4px solid var(--gold); border-radius: 7px; background: #fff8eb; color: #654d2a; font-size: 10px; line-height: 1.45; }
+    .custom-rate-help[hidden] { display: none; }
+    .multi-select { position: relative; }
+    .multi-select > summary { min-height: 48px; display: flex; align-items: center; padding: 10px 38px 10px 13px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.82); color: var(--ink); cursor: pointer; list-style: none; font-size: 11px; }
+    .multi-select > summary::-webkit-details-marker { display: none; }
+    .multi-select > summary::after { content: '⌄'; position: absolute; right: 14px; font-weight: 800; }
+    .multi-select[open] > summary::after { content: '⌃'; }
+    .multi-select-panel { position: absolute; z-index: 12; top: calc(100% + 5px); left: 0; min-width: 260px; max-height: 300px; overflow: auto; padding: 10px; border: 1px solid #bcc9d0; border-radius: 8px; background: #fff; box-shadow: 0 12px 28px rgba(20,39,52,.18); }
+    .multi-select-actions { display: flex; gap: 7px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+    .multi-select-actions button { flex: 1; padding: 7px; font-size: 9px; }
+    .provider-choice { display: flex; gap: 8px; align-items: center; padding: 7px 4px; color: var(--ink-soft); font-size: 10px; }
+    .provider-choice input { accent-color: var(--steel-dark); }
+    .provider-filter-panel { width: 100%; margin: 0 0 14px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #f7fafb; }
+    .provider-filter-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+    .provider-filter-head strong { font-size: 11px; }
+    .provider-filter-head .button-row { margin: 0; }
+    .provider-filter-head button { padding: 7px 10px; font-size: 9px; }
+    .provider-filter-grid { display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 8px; }
+    .provider-chip { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 9px 10px; border: 1px solid #d2dce1; border-radius: 8px; background: #fff; color: var(--ink-soft); font-size: 10px; cursor: pointer; }
+    .provider-chip:has(input:checked) { border-color: #7893a3; background: #edf4f7; color: var(--ink); font-weight: 700; }
+    .provider-chip input { margin: 0; accent-color: var(--steel-dark); }
+    .provider-mark { display: inline-grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; border: 1px solid currentColor; border-radius: 50%; background: #fff; font-size: 14px; font-weight: 900; line-height: 1; }
+    .provider-mark.openai { color:#246b62; background:#e9f6f2; }.provider-mark.anthropic { color:#8a4f28; background:#fff1e8; }.provider-mark.google { color:#315cad; background:#edf3ff; }.provider-mark.deepseek { color:#5c48a8; background:#f1edff; }.provider-mark.perplexity { color:#087d87; background:#e5f7f8; }.provider-mark.mistral { color:#a74717; background:#fff0e2; }
+    .provider-cell { display: inline-flex; align-items: center; gap: 7px; }
+    .upload-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .format-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .format-chip { padding: 4px 7px; border: 1px solid #d4dee3; border-radius: 999px; background: #fff; color: var(--ink-soft); font-size: 8px; font-weight: 700; }
+    .auto-upload-guide { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 10px; }
+    .auto-upload-step { display: grid; grid-template-columns: 27px 1fr; gap: 7px; align-items: center; padding: 8px; border: 1px solid #d7e0e5; border-radius: 7px; background: rgba(255,255,255,.7); }
+    .auto-upload-step b { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; background: var(--steel-dark); color: #fff; font-size: 11px; }
+    .auto-upload-step span { font-size: 8px; line-height: 1.35; color: var(--ink-soft); }
+    .model-picker { margin: 0 0 14px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #f7fafb; }
+    .model-picker[hidden] { display: none; }
+    .model-picker-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+    .model-picker-head strong { font-size: 11px; color: var(--ink); }
+    .model-picker-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:7px; }
+    .model-picker-actions button { padding:7px 10px; font-size:9px; }
+    .comparison-selection-summary { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 14px; padding:11px 12px; border:1px solid #b9cbd4; border-radius:8px; background:#edf4f7; color:var(--ink-soft); font-size:10px; }
+    .provider-filter-panel[hidden], .comparison-selection-summary[hidden] { display:none; }
+    .comparison-selection-summary strong { color:var(--ink); }
+    .file-support { display:block; margin-top:6px; color:var(--ink-soft); font-size:9px; line-height:1.4; }
+    .model-picker-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 7px 12px; }
+    .model-picker-grid label { display: flex; gap: 7px; align-items: flex-start; font-size: 10px; color: var(--ink-soft); }
+    .model-picker-grid input { margin-top: 2px; accent-color: var(--steel-dark); }
+    .comparison-table { min-width: 920px; }
+    .comparison-table th, .comparison-table td { text-align: right; }
+    .comparison-table th:nth-child(-n+2), .comparison-table td:nth-child(-n+2) { text-align: left; }
+    .comparison-table .reference-row td { background: #fff3dc; font-weight: 700; }
+    .comparison-table .best-row td { background: #e8f6f1; }
+    .comparison-table .best-row.reference-row td { background: linear-gradient(90deg,#fff3dc 0 48%,#e8f6f1 100%); }
+    .comparison-table .best-row td:first-child { box-shadow: inset 4px 0 0 #1f7a65; }
+    .model-provider { display: block; color: var(--ink-soft); font-size: 10px; font-weight: 500; }
+    .reference-badge { display: inline-block; margin-left: 6px; padding: 2px 6px; border: 1px solid #aa7c39; border-radius: 999px; color: #765524; background: #fff8eb; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; }
+    .best-badge { display:inline-block; margin-left:6px; padding:2px 6px; border:1px solid #2d846f; border-radius:999px; color:#175847; background:#effaf6; font-size:9px; text-transform:uppercase; letter-spacing:.04em; }
+    .comparison-empty { padding: 18px; border: 1px dashed #aebbc3; border-radius: 8px; color: var(--ink-soft); text-align: center; }
+
+    @media (max-width: 920px) { .workspace, .economics-layout { grid-template-columns: 1fr; } .summary { position: static; } .control-deck { grid-template-columns: 1fr; } .project-actions { justify-content: flex-start; max-width: none; } .save-status { text-align: left; } .guide-flow { grid-template-columns: 1fr 1fr; } .model-picker-grid { grid-template-columns: 1fr 1fr; } .provider-filter-grid { grid-template-columns: repeat(3,minmax(120px,1fr)); } }
+    @media (max-width: 700px) { .mini-help-steps { grid-template-columns: 1fr; } }
+    @media (max-width: 580px) { .split, .manual-tokens, .fx-grid, .comparison-controls, .guide-flow, .economics-results, .comparison-slots, .project-model-grid, .model-picker-grid, .quick-file-grid, .upload-actions, .auto-upload-guide { grid-template-columns: 1fr; } .provider-filter-grid { grid-template-columns: 1fr 1fr; } .provider-filter-head { align-items:flex-start;flex-direction:column; } .project-name-field { grid-column: auto; } .economics-form .split > .field > label { min-height: 0; } .project-bar { grid-template-columns: 1fr; gap: 5px; } .project-bar-value { text-align: left; } .hero { min-height: 248px; } .topline { align-items: flex-start; } .status-pill { display: none; } .card-body, .card-head { padding-left: 16px; padding-right: 16px; } .project-actions button { flex: 1 1 42%; } .project-help-panel { position: fixed; top: 18%; left: 5%; right: 5%; width: 90%; } .growth-row { grid-template-columns: 58px 1fr; } .growth-row strong { grid-column: 2; } .snapshot { flex-wrap:wrap; } .module-head { align-items:flex-start; } .file-guide-row { align-items:flex-start; } }
+    @media (prefers-reduced-motion: reduce) { .snowfield i { animation: none; display: none; } * { scroll-behavior: auto !important; } }
+    /* Variante de interfaz: acciones compactas y ayuda integrada */
+    .comparison-project-toolbar { padding: 8px; gap: 7px; }
+    .comparison-project-toolbar .compact-action,
+    .comparison-report-action .compact-action,
+    #loadFx,
+    #downloadReport,
+    #reset { width: auto; min-height: 34px; padding: 7px 11px; border-radius: 7px; font-size: 10px; line-height: 1.2; }
+    #loadFx { align-self: end; min-height: 40px; }
+    .comparison-project-toolbar .project-help { position:relative; flex: 0 0 auto; }
+    .comparison-project-toolbar .project-help summary { display: inline-flex; width: auto; height: 34px; padding: 0 10px; gap: 6px; border-radius: 999px; white-space: nowrap; font-size: 0; }
+    .comparison-project-toolbar .project-help summary::before { content: '?'; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--steel-dark); color:#fff; font-size:10px; }
+    .comparison-project-toolbar .project-help summary::after { content: 'Ayuda'; color:var(--steel-dark); font-size:9px; font-weight:800; }
+    .comparison-project-toolbar .project-help summary .help-symbol { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--steel-dark); color: #fff; font-size: 10px; }
+    .comparison-project-toolbar .project-help[open]::before { content:''; position:fixed; z-index:18; inset:0; background:rgba(19,38,51,.28); backdrop-filter:blur(1px); }
+    .comparison-project-toolbar .project-help-panel { position:fixed; z-index:20; top:50%; left:50%; right:auto; width:min(460px,calc(100vw - 32px)); max-height:min(560px,calc(100vh - 48px)); margin:0; padding:18px 20px; overflow:auto; border:1px solid #aebfc8; border-radius:14px; box-shadow:0 20px 54px rgba(19,38,51,.28); background:#fff; transform:translate(-50%,-50%); }
+    .help-close { float:right; min-width:34px; min-height:34px; margin:-6px -6px 8px 12px; padding:6px; border:1px solid #bdcbd3; border-radius:50%; background:#eef3f6; color:var(--steel-dark); font-size:16px; line-height:1; }
+    .comparison-report-action { justify-content: flex-start; }
+    .field label, .card-body > p, .muted, .project-slot p { font-size:11px; }
+    .audience-note, .token-line, .inline-note, .footnote, .fx-status { font-size:10px; line-height:1.55; }
+    .format-chip { font-size:9px; padding:5px 8px; }
+    .auto-upload-step span { font-size:9.5px; line-height:1.45; }
+    .upload-group > strong, .provider-filter-head strong, .model-picker-head strong { font-size:11px; }
+    .project-help-panel dl { font-size:11px; line-height:1.5; }
+    .section-nav a { font-size:11px; }
+    .card-head p { font-size:12px; line-height:1.5; }
+    .comparison-table th, .comparison-table td, .cost-table-wrap th, .cost-table-wrap td { font-size:10.5px; }
+    .kpi span, .result-total small, .model-provider { font-size:10px; }
+    button, .upload { font-size:10.5px; }
+    .model-picker { padding:14px; }
+    #selectRecommendedModels { width:auto; min-height:34px; padding:7px 11px; border-radius:7px; font-size:10px; }
+    .model-picker-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .model-provider-group { min-width:0; padding:11px; border:1px solid #d3dde2; border-radius:10px; background:rgba(255,255,255,.82); }
+    .model-provider-group > header { display:grid; grid-template-columns:28px 1fr auto; gap:8px; align-items:center; margin-bottom:9px; }
+    .model-provider-group > header strong { font-size:11px; }
+    .model-provider-group > header span:last-child { color:var(--ink-soft); font-size:9px; }
+    .model-option-grid { display:grid; grid-template-columns:1fr; gap:6px; }
+    .model-option-grid .model-option { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:8px; min-height:36px; padding:7px 9px; border:1px solid #dce4e8; border-radius:7px; background:#f8fafb; color:var(--ink-soft); font-size:10px; line-height:1.3; cursor:pointer; }
+    .model-option-grid .model-option:has(input:checked) { border-color:#718d9d; background:#eaf2f5; color:var(--ink); font-weight:700; }
+    .model-option-grid .model-option input { width:16px; height:16px; margin:0; accent-color:var(--steel-dark); }
+    @media (max-width: 700px) {
+      .comparison-project-toolbar { align-items: stretch; }
+      .comparison-project-toolbar .compact-action { flex: 1 1 150px; }
+      .comparison-project-toolbar .check { flex: 1 1 100%; }
+      .fx-grid #loadFx { justify-self: start; }
+      .model-picker-grid { grid-template-columns:1fr; }
+      .comparison-project-toolbar .project-help-panel { width:calc(100vw - 24px); max-height:calc(100vh - 24px); padding:16px; }
+    }
+    @media (min-width:701px) and (max-width:1100px) { .model-picker-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="snowfield" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <svg class="winter-scene" viewBox="0 0 1440 128" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ridge" d="M0 93 130 37l72 35 108-58 104 72 102-44 75 44 120-66 108 62 91-35 108 42 151-69 151 76 140-39v71H0Z"/>
+      <path class="wall" d="M0 105h167v-13h18v13h103v-22h22v-18h28v18h22v22h106V92h19v13h142V74h23V50h27v24h22v31h61V87h18v18h142V92h20v13h121V78h22V57h28v21h22v27h136v23H0Z"/>
+    </svg>
+    <div class="topline">
+      <div class="brand"><span class="sigil" aria-hidden="true"><svg viewBox="0 0 36 42"><path d="M18 1 33 7v12c0 10-6 17-15 22C9 36 3 29 3 19V7Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10 23 3-9 5 4 5-4 3 9-8 7Z" fill="currentColor" opacity=".92"/><path d="m13 14-3-3m13 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span> Calculadora de Tokens</div>
+      <span class="status-pill">Costos de API · no suscripciones</span>
+    </div>
+    <div class="hero-copy">
+      <p class="eyebrow">Estimador de costos de API</p>
+      <h1>Calcula el costo de IA de cualquier proyecto.</h1>
+      <p>Carga o pega el input y output, registra tarifas verificadas y obtén un estimado trazable por llamada y por volumen.</p>
+      <div class="hero-actions"><button id="loadExampleTop" type="button">Ver una vista de ejemplo</button></div>
+    </div>
+  </header>
+
+  <nav class="section-nav" aria-label="Secciones de la calculadora">
+    <a href="#project-section">Proyecto y modelo</a><a href="#texts-section">Input y output</a><a href="#rates-section">Tarifas y moneda</a><a href="#results-section">Resultado</a><a href="#comparison-section">Modelos</a><a href="#value-section">Valor</a><a href="#economics-section">Proyectos</a>
+  </nav>
+
+  <main class="wrap">
+    <div class="notice" role="note"><strong>Transparencia:</strong> esta versión estima tokens localmente desde las palabras. Para presupuestos reales, ingresa los tokens contados con el tokenizador del proveedor y conserva la fuente y fecha de las tarifas.</div>
+    <section class="control-deck" aria-label="Modo y administración del proyecto">
+      <div>
+        <p class="mode-title">Modo de trabajo</p>
+        <div class="mode-switch" role="radiogroup" aria-label="Modo de trabajo">
+          <label class="mode-option"><input id="modeAuto" type="radio" name="workMode" value="auto" checked><span>Autónomo</span></label>
+          <label class="mode-option"><input id="modeManual" type="radio" name="workMode" value="manual"><span>Manual</span></label>
+        </div>
+        <p id="modeDescription" class="mode-description">Completa lo esencial: la calculadora aplica tarifas documentadas, calcula al instante, actualiza moneda y guarda la sesión.</p>
+      </div>
+      <div class="project-actions">
+        <span id="saveStatus" class="save-status" aria-live="polite">Sesión lista para guardarse localmente.</span>
+        <label class="check" title="Conserva automáticamente la sesión en este navegador"><input id="autoSave" type="checkbox" checked> Guardado automático</label>
+        <button class="secondary" id="importConfig" type="button" title="Carga una configuración de proyecto guardada en formato JSON">↥ Abrir proyecto</button>
+        <input id="configFile" type="file" accept=".json,application/json" hidden>
+        <button class="secondary" id="exportConfig" type="button" title="Descarga la configuración editable del proyecto en formato JSON">↓ Guardar proyecto</button>
+        <button class="secondary" id="exportCsv" type="button" disabled title="Descarga la tabla del comparativo entre modelos en formato CSV">▦ Exportar CSV</button>
+        <details class="project-help">
+          <summary aria-label="Información sobre los controles del proyecto" title="¿Qué hacen estos controles?">i</summary>
+          <div class="project-help-panel">
+            <strong>Controles del proyecto</strong>
+            <dl>
+              <dt>Guardado automático</dt><dd>Conserva la sesión actual en este navegador.</dd>
+              <dt>Abrir proyecto</dt><dd>Carga una configuración JSON guardada anteriormente.</dd>
+              <dt>Guardar proyecto</dt><dd>Descarga la configuración editable en formato JSON; no es un informe.</dd>
+              <dt>Exportar CSV</dt><dd>Descarga la tabla del comparativo entre modelos para analizarla en Excel u otra herramienta.</dd>
+            </dl>
+          </div>
+        </details>
+      </div>
+    </section>
+    <details class="quick-guide">
+      <summary>Cómo usar la calculadora en menos de un minuto</summary>
+      <div class="guide-flow">
+        <div class="guide-step"><span class="guide-number" aria-hidden="true">↥</span><b>1. Sube el proyecto</b><span>La aplicación toma el nombre y busca campos de input y output.</span></div>
+        <div class="guide-step"><span class="guide-number" aria-hidden="true">✓</span><b>2. Revisa lo detectado</b><span>Los datos inferidos y los pendientes aparecen claramente identificados.</span></div>
+        <div class="guide-step"><span class="guide-number" aria-hidden="true">↗</span><b>3. Define el volumen</b><span>Ajusta llamadas, presupuesto o crecimiento sólo si lo necesitas.</span></div>
+        <div class="guide-step"><span class="guide-number" aria-hidden="true">▦</span><b>4. Compara y descarga</b><span>Consulta modelos compatibles y exporta el informe o el CSV.</span></div>
+      </div>
+    </details>
+    <div class="workspace">
+      <section class="stack" aria-label="Entradas de la calculadora">
+        <article class="card" id="project-section">
+          <div class="card-head"><h2>1. Proyecto y modelo <span class="complexity-badge essential">Esencial</span></h2><p>Selecciona un modelo con tarifa documentada o registra una tarifa personalizada.</p></div>
+          <div class="card-body stack">
+            <div class="project-model-grid">
+              <div class="field project-name-field"><label for="project">Proyecto</label><input id="project" type="text" placeholder="Ej. Clasificación de tickets"></div>
+              <div class="field"><label for="modelProvider">Proveedor</label><select id="modelProvider"><option value="OpenAI">OpenAI</option></select></div>
+              <div class="field"><label for="model">Modelo de IA</label><select id="model"><option value="">Selecciona un modelo</option></select></div>
+            </div>
+            <div class="project-meta-stack">
+              <div class="field audience-field"><label for="audience">¿Para quién es el informe?</label><select id="audience"><option value="">Selecciona una audiencia</option><option value="Dirección">Dirección</option><option value="Cliente">Cliente</option><option value="Equipo financiero">Equipo financiero</option><option value="Dirección de Operaciones">Dirección de operaciones</option><option value="Equipo técnico">Equipo técnico</option><option value="Docencia o academia">Docencia o academia</option><option value="Uso personal">Uso personal</option><option value="other">Otro</option></select><div class="field"><label for="reportTheme">Temática del informe</label><select id="reportTheme"><option value="executive">Ejecutiva</option><option value="academic">Académica</option><option value="operational">Operativa</option></select></div><p id="audienceNote" class="audience-note">La audiencia adapta la lectura y la temática define la presentación del informe; no modifican los cálculos.</p><div id="audienceOtherField" class="field" hidden><label for="audienceOther">Especifica la audiencia</label><input id="audienceOther" type="text" placeholder="Ej. Comité de inversión"></div></div>
+              <div class="field project-file-field auto-only">
+                <label>Proyecto a cotizar <small>(máximo 25 MB)</small></label>
+                <div class="upload-actions"><div class="upload-group"><strong>Archivo de texto o datos</strong><label class="upload">▣ Seleccionar archivo<input id="projectFile" type="file" accept=".txt,.md,.json,.csv,.html,.htm,.xml,.yaml,.yml,text/plain,text/markdown,application/json,text/csv,text/html,application/xml,text/xml"></label></div><div class="upload-group"><strong>Carpeta o ZIP</strong><div class="upload-group-actions"><label class="upload">▦ Carpeta<input id="projectFolder" type="file" webkitdirectory multiple></label><label class="upload">▣ ZIP<input id="projectZip" type="file" accept=".zip,application/zip"></label></div></div></div>
+                <div class="format-chips" aria-label="Formatos aceptados"><span class="format-chip">TXT / MD</span><span class="format-chip">JSON / CSV</span><span class="format-chip">HTML / XML / YAML</span><span class="format-chip">ZIP</span><span class="format-chip">CARPETAS</span></div>
+                <div class="file-guide-row"><span>La estructura y los nombres ayudan a detectar los campos.</span><details class="file-guide"><summary aria-label="Consejos para una mejor lectura del archivo" title="Abre consejos para mejorar la lectura del archivo">ⓘ <span>Consejos para una mejor lectura</span></summary><div class="file-guide-panel"><strong>Para que la calculadora lea mejor tu proyecto</strong><p>Usa encabezados como Proyecto, Audiencia, Volumen, Presupuesto, Input y Output. En JSON, XML o YAML utiliza esas mismas claves. En carpetas o ZIP, nombra los archivos de texto con palabras como input, prompt, output o respuesta. Los ZIP con contraseña y los archivos binarios no se procesan.</p></div></details></div>
+                <div id="projectFileStatus" class="token-line file-status" aria-live="polite">Ningún archivo cargado.</div>
+                <label class="check"><input id="useProjectFileAsInput" type="checkbox" checked> Aplicar el input y output detectados</label>
+                <p class="token-line"><strong>ⓘ Modo autónomo · cómo procesa la carga</strong></p><div class="auto-upload-guide"><div class="auto-upload-step"><b>1</b><span>Sube un archivo, ZIP o carpeta. Todo se lee localmente.</span></div><div class="auto-upload-step"><b>2</b><span>Se buscan título, audiencia, volumen y secciones Input/Output.</span></div><div class="auto-upload-step"><b>3</b><span>Revisa lo detectado; si falta algo, complétalo en “Input y output”.</span></div></div>
+              </div>
+            </div>
+            <div class="split manual-only">
+              <div class="field"><label for="source">Fuente de tarifas API <small>(URL oficial o nota verificable)</small></label><input id="source" type="text" placeholder="https://… o referencia documental"></div>
+              <div class="field"><label for="priceDate">Fecha de consulta</label><input id="priceDate" type="date"></div>
+            </div>
+            <div class="source-panel manual-only">
+              <a id="officialRateLink" href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">Consultar tarifas oficiales de API ↗</a>
+              <p id="modelNote">Las tarifas precargadas se aplican al uso de API. Selecciona un modelo para ver sus condiciones.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" id="texts-section">
+          <div class="card-head"><h2>2. Input y output <span class="complexity-badge essential">Esencial</span></h2><p>El texto sirve para una estimación local; los tokens manuales tienen prioridad.</p></div>
+          <div class="card-body stack">
+            <div class="split">
+              <div class="field">
+                <div class="field-row"><label for="inputText">Input / prompt</label><label class="upload">↑ Cargar archivo<input id="inputFile" type="file" accept=".txt,.md,.json,.csv,text/plain,text/markdown,application/json,text/csv"></label></div>
+                <textarea id="inputText" placeholder="Pega aquí el prompt, instrucciones, contexto o texto de entrada."></textarea>
+                <small class="file-support">Carga directa opcional: TXT, MD, JSON o CSV. Sirve para corregir o sustituir el input detectado en el archivo general.</small>
+              </div>
+              <div class="field">
+                <div class="field-row"><label for="outputText">Output / respuesta</label><label class="upload">↑ Cargar archivo<input id="outputFile" type="file" accept=".txt,.md,.json,.csv,text/plain,text/markdown,application/json,text/csv"></label></div>
+                <textarea id="outputText" placeholder="Pega aquí una salida esperada o una muestra de respuesta."></textarea>
+                <small class="file-support">Carga directa opcional: TXT, MD, JSON o CSV. Úsala para controlar exactamente la muestra de salida.</small>
+              </div>
+            </div>
+            <div class="split"><div id="inputEstimate" class="token-line">Input: sin texto.</div><div id="outputEstimate" class="token-line">Output: sin texto.</div></div>
+            <label class="check manual-only"><input id="useManual" type="checkbox"> Usar tokens manuales verificados</label>
+            <div id="manualTokens" class="manual-tokens manual-only">
+              <div class="field"><label for="manualInput">Tokens de entrada</label><input id="manualInput" type="number" min="0" step="1" placeholder="Ej. 42"></div>
+              <div class="field"><label for="manualOutput">Tokens de salida</label><input id="manualOutput" type="number" min="0" step="1" placeholder="Ej. 1408"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" id="rates-section">
+          <div class="card-head"><h2>3. Tarifas, moneda y volumen <span class="complexity-badge essential">Esencial</span></h2><p>Las tarifas base se registran en USD por millón de tokens y pueden convertirse para presentación.</p></div>
+          <div class="card-body stack">
+            <div class="split manual-only">
+              <div class="field"><label for="inputRate">Input por 1,000,000 tokens</label><input id="inputRate" type="number" min="0" step="0.000001" placeholder="Ej. 5.00"></div>
+              <div class="field"><label for="outputRate">Output por 1,000,000 tokens</label><input id="outputRate" type="number" min="0" step="0.000001" placeholder="Ej. 30.00"></div>
+            </div>
+            <div class="field manual-only"><label for="fixedRate">Cargo fijo por llamada <small>(opcional)</small></label><input id="fixedRate" type="number" value="0" min="0" step="0.000001"></div>
+            <div id="customRateHelp" class="custom-rate-help manual-only" hidden><strong>Cómo usar una tarifa personalizada</strong><br>Ingresa el precio de input y output por 1,000,000 de tokens, agrega un cargo fijo sólo si existe y documenta arriba la fuente y fecha. La calculadora tratará estos valores como declarados: no los verifica automáticamente.</div>
+            <div class="volume-panel">
+              <div class="split">
+                <div class="field"><label for="volumeMode">Cómo definir el volumen</label><select id="volumeMode"><option value="quick">Elegir un volumen rápido</option><option value="custom">Ingresar un número específico</option></select></div>
+                <div id="volumeQuickField" class="field numeric-field"><label class="field-icon icon-volume" for="comparisonVolume">Volumen rápido</label><select id="comparisonVolume"><option value="1000">1,000 llamadas</option><option value="10000">10,000 llamadas</option><option value="1000000">1,000,000 llamadas</option></select></div>
+                <div id="volumeCustomField" class="field numeric-field" hidden><label class="field-icon icon-volume" for="volume">Número específico de llamadas</label><input id="volume" type="number" value="1000" min="1" step="1"></div>
+              </div>
+              <p id="volumeNote" class="volume-note">El cálculo utilizará el volumen rápido seleccionado.</p>
+            </div>
+            <div class="split budget-panel">
+              <div class="field numeric-field"><label class="field-icon icon-budget" for="budget">Presupuesto del periodo <small>Se compara contra el costo de las llamadas declaradas para el mismo periodo.</small></label><input id="budget" type="number" min="0" step="0.01" placeholder="Ej. 5000"></div>
+              <div class="field numeric-field"><label class="field-icon icon-period" for="budgetPeriod">Periodo del escenario <small>Aplica al volumen, presupuesto, proyección y evaluación de valor.</small></label><select id="budgetPeriod"><option value="proyecto">Proyecto completo</option><option value="día">Día</option><option value="semana">Semana</option><option value="mes">Mes</option><option value="año">Año</option></select></div>
+            </div>
+            <details class="projection-config">
+              <summary>↗ Proyección de uso y costo <small>(opcional)</small></summary>
+              <div class="projection-body">
+                <p>Estima qué ocurriría si el número de llamadas aumenta el mismo porcentaje en cada periodo. Mantiene constante el costo por llamada.</p>
+                <label class="check"><input id="growthEnabled" type="checkbox"> Activar proyección</label>
+                <div id="growthControls" class="split projection-panel" hidden>
+                  <div class="field numeric-field"><label class="field-icon icon-growth" for="growthRate">Aumento de llamadas por periodo (%)</label><input id="growthRate" type="number" min="0" step="1" value="25"></div>
+                  <div class="field numeric-field"><label class="field-icon icon-horizon" for="growthPeriods">Número de periodos</label><select id="growthPeriods"><option value="1">1 periodo</option><option value="3" selected>3 periodos</option><option value="6">6 periodos</option><option value="12">12 periodos</option></select></div>
+                </div>
+                <div class="projection-formula">Ejemplo: 10,000 llamadas con crecimiento de 25% producen 12,500 en el periodo 1 y 15,625 en el periodo 2. El costo se obtiene multiplicando esas llamadas por el costo unitario calculado.</div>
+              </div>
+            </details>
+            <hr class="rule">
+            <div class="fx-grid">
+              <div class="field"><label for="currency">Moneda de resultado</label><select id="currency"><option value="USD">USD · dólar estadounidense</option><option value="MXN">MXN · peso mexicano</option><option value="EUR">EUR · euro</option><option value="GBP">GBP · libra esterlina</option><option value="CAD">CAD · dólar canadiense</option><option value="JPY">JPY · yen japonés</option><option value="BRL">BRL · real brasileño</option><option value="custom">Otra moneda</option></select></div>
+              <div class="field"><label for="fxRate">Tipo de cambio <small>1 USD = moneda seleccionada</small></label><input id="fxRate" type="number" value="1" min="0.00000001" step="0.000001"></div>
+              <button class="secondary" id="loadFx" type="button">Actualizar cambio</button>
+            </div>
+            <div id="customCurrencyField" class="field" hidden><label for="customCurrency">Código ISO de moneda</label><input id="customCurrency" type="text" maxlength="3" placeholder="Ej. COP"></div>
+            <div class="auto-row">
+              <label class="check"><input id="autoFx" type="checkbox" checked> Actualizar automáticamente el tipo de cambio al cambiar de moneda</label>
+              <p id="fxStatus" class="fx-status" aria-live="polite"><span class="status-dot ok"></span>USD es la moneda base; no requiere conversión.</p>
+            </div>
+            <p class="inline-note"><strong>Cálculo automático:</strong> los resultados se actualizan al modificar textos, modelo, tarifas, moneda o número de llamadas.</p>
+            <div class="button-row"><button class="secondary" id="downloadReport" type="button" disabled title="Descarga el informe del proyecto actualmente abierto">↓ Descargar informe</button><button class="secondary" id="reset" type="button" title="Inicia una sesión nueva sin eliminar los proyectos guardados para comparar">↺ Restablecer</button></div>
+          </div>
+        </article>
+      </section>
+
+      <aside class="summary" aria-label="Resultados" id="results-section">
+        <article class="card">
+          <div class="card-head"><h2>Resultado del proyecto</h2><p id="resultSubtitle">Completa tarifas, textos o tokens manuales.</p></div>
+          <div class="card-body">
+            <div class="result-total"><p>Costo estimado del volumen seleccionado</p><output id="projectCost" aria-live="polite">—</output><small id="volumeLabel">0 llamadas</small></div>
+            <div class="kpis">
+              <div class="kpi"><span>Costo por llamada</span><strong id="perCall">—</strong></div>
+              <div class="kpi"><span>Tokens usados</span><strong id="tokenTotal">—</strong></div>
+              <div class="kpi"><span>Salida del costo variable</span><strong id="outputShare">—</strong></div>
+              <div class="kpi"><span>Estado de tokens</span><strong id="tokenStatus">Pendiente</strong></div>
+              <div class="kpi"><span>Uso del presupuesto</span><strong id="budgetUsage">—</strong></div>
+              <div class="kpi"><span>Capacidad del presupuesto</span><strong id="budgetCapacity">—</strong></div>
+            </div>
+            <div id="budgetBlock" class="budget-panel" hidden><div class="auto-row"><strong>Control presupuestal</strong><span id="budgetStatus" class="muted">—</span></div><div class="budget-progress" role="progressbar" aria-label="Uso del presupuesto"><span id="budgetBar"></span></div></div>
+            <div class="composition">
+              <header><span>Composición del costo por llamada</span><span id="compositionValue">—</span></header>
+              <div class="bar" aria-label="Desglose del costo"><span id="inputBar" class="input-bar" style="width:0%"></span><span id="outputBar" class="output-bar" style="width:0%"></span><span id="fixedBar" class="fixed-bar" style="width:0%"></span></div>
+              <div class="legend"><span><i class="input-bar"></i>Input</span><span><i class="output-bar"></i>Output</span><span><i class="fixed-bar"></i>Cargo fijo</span></div>
+            </div>
+            <div class="cost-table-wrap">
+              <table>
+                <thead><tr><th>Escala</th><th>Costo</th></tr></thead>
+                <tbody id="scaleRows"><tr><td>Por llamada</td><td>—</td></tr><tr><td>1,000 llamadas</td><td>—</td></tr><tr><td>10,000 llamadas</td><td>—</td></tr><tr><td>1,000,000 llamadas</td><td>—</td></tr></tbody>
+              </table>
+            </div>
+            <div id="audit" class="audit warn"><strong>Estado: pendiente</strong>Faltan tarifas y tokens para calcular.</div>
+            <div id="executiveInsight" class="insight"><strong>Lectura ejecutiva</strong>Completa los datos para identificar el principal impulsor del costo y una oportunidad de ahorro.</div>
+            <div id="growthCard" class="growth-card" hidden><header><strong>Proyección de uso y costo</strong><span id="growthSummary" class="muted">—</span></header><div id="growthBars" class="growth-bars"></div><p class="footnote">Cada periodo aplica el crecimiento al volumen del periodo anterior. No estima beneficios, ahorro ni demanda real.</p></div>
+            <p class="footnote">La estimación no incorpora impuestos, descuentos, caché, herramientas, imágenes, audio ni razonamiento facturable salvo que los agregues al cargo fijo.</p>
+          </div>
+        </article>
+      </aside>
+    </div>
+    <section class="card comparison-card essential-module" id="comparison-section" aria-labelledby="comparisonTitle">
+      <div class="card-head"><h2 id="comparisonTitle">Comparativo entre modelos <span class="complexity-badge essential">Esencial</span></h2><p>Usa el modelo seleccionado como referencia y aplica los mismos tokens, volumen y moneda a las demás tarifas estándar.</p></div>
+      <div class="card-body">
+        <div class="comparison-controls">
+          <div class="field"><label for="comparisonMode">Modelos a comparar</label><select id="comparisonMode"><option value="recommended">Principales de cada proveedor</option><option value="all">Todos los modelos</option><option value="custom">Personalizar la tabla</option></select></div>
+          <div class="field"><label for="comparisonSort">Ordenar por</label><select id="comparisonSort"><option value="cost">Menor costo del proyecto</option><option value="difference">Menor diferencia contra referencia</option><option value="provider">Proveedor y modelo</option></select></div>
+        </div>
+        <div id="comparisonProviderPanel" class="provider-filter-panel"><div class="provider-filter-head"><strong>Proveedores incluidos</strong><div class="button-row"><button id="selectAllProviders" class="secondary" type="button">Seleccionar todos</button><button id="clearProviders" class="secondary" type="button">Limpiar</button></div></div><div id="comparisonProviderChoices" class="provider-filter-grid"></div></div>
+        <div id="comparisonModelPicker" class="model-picker" hidden><div class="model-picker-head"><strong>Elige los modelos que aparecerán en la tabla</strong><div class="model-picker-actions"><button id="selectRecommendedModels" class="secondary" type="button">Usar recomendados</button><button id="selectAllModels" class="secondary" type="button">Seleccionar todos</button><button id="clearModels" class="secondary" type="button">Limpiar</button><button id="applyModelSelection" class="primary" type="button">Visualizar</button></div></div><div id="comparisonModelChoices" class="model-picker-grid"></div></div>
+        <div id="comparisonSelectionSummary" class="comparison-selection-summary" hidden><span><strong>Selección aplicada.</strong> <span id="comparisonSelectionCount"></span></span><button id="editComparisonSelection" class="secondary" type="button">Editar selección</button></div>
+        <div id="comparisonEmpty" class="comparison-empty">Selecciona un modelo y completa el cálculo para consultar el comparativo.</div>
+        <div id="comparisonTableWrap" class="cost-table-wrap" hidden>
+          <table class="comparison-table">
+            <thead><tr><th>Modelo</th><th>Proveedor</th><th>Costo por llamada</th><th>Costo del proyecto</th><th>Diferencia</th><th>Diferencia %</th></tr></thead>
+            <tbody id="comparisonRows"></tbody>
+          </table>
+        </div>
+        <p class="footnote">Comparación económica, no de calidad. Los conteos se mantienen iguales para hacer comparable el escenario; la facturación real puede variar porque cada proveedor usa su propio tokenizador y puede aplicar cargos por razonamiento, caché, herramientas, modalidad o longitud de contexto.</p>
+      </div>
+    </section>
+    <section class="card comparison-card optional-module" id="value-section" aria-labelledby="valueTitle">
+      <div class="card-head module-head"><div><h2 id="valueTitle">Evaluación de valor <span class="complexity-badge optional">Opcional</span></h2><p>Estima si el ahorro operativo declarado podría justificar el costo de IA y la inversión inicial.</p></div><button id="toggleValueModule" class="secondary module-toggle" type="button" aria-expanded="false">Configurar evaluación</button></div>
+      <div id="valueSectionBody" class="card-body" hidden>
+            <p class="muted"><strong>Estos datos debe proporcionarlos el usuario.</strong> La calculadora no puede inferir el ahorro de tiempo, el costo laboral ni la inversión inicial. Esta evaluación es opcional y no afecta el cálculo del costo de IA.</p>
+            <details class="mini-help"><summary>ⓘ Cómo usar esta evaluación</summary><div class="mini-help-steps"><div class="mini-help-step"><span class="mini-help-icon" aria-hidden="true">¤</span><div><strong>1. Declara el esfuerzo</strong><small>Inversión inicial y costo laboral por hora.</small></div></div><div class="mini-help-step"><span class="mini-help-icon" aria-hidden="true">◷</span><div><strong>2. Estima el ahorro</strong><small>Minutos que realmente se ahorrarían por operación.</small></div></div><div class="mini-help-step"><span class="mini-help-icon" aria-hidden="true">↗</span><div><strong>3. Revisa el resultado</strong><small>Valor neto, recuperación y punto de equilibrio.</small></div></div></div><p class="mini-help-warning"><b aria-hidden="true">!</b><span>Usa datos operativos verificables. La evaluación orienta la decisión, pero no garantiza el beneficio.</span></p></details>
+            <input id="roiEnabled" type="checkbox" hidden>
+            <div id="roiModule" class="economics-layout" hidden>
+          <div class="economics-form">
+            <div class="split">
+              <div class="field numeric-field"><label for="implementationCost">Inversión inicial declarada</label><input id="implementationCost" type="number" min="0" step="0.01" value="0"></div>
+              <div class="field numeric-field"><label for="minutesSaved">Minutos que el usuario estima ahorrar por operación</label><input id="minutesSaved" type="number" min="0" step="0.1" value="0"></div>
+            </div>
+            <div class="split">
+              <div class="field numeric-field"><label for="hourlyCost">Costo laboral por hora declarado</label><input id="hourlyCost" type="number" min="0" step="0.01" value="0"></div>
+            </div>
+            <details class="projection-config"><summary>Ajustes avanzados</summary><div class="projection-body"><div class="split">
+              <div class="field numeric-field"><label for="roiPeriods">Periodos que el usuario desea analizar</label><select id="roiPeriods"><option value="1">1 periodo</option><option value="3">3 periodos</option><option value="6">6 periodos</option><option value="12" selected>12 periodos</option></select></div>
+              <div class="field numeric-field"><label for="automationRate">Operaciones que realmente ahorrarían ese tiempo (%)</label><input id="automationRate" type="number" min="0" max="100" step="1" value="100"></div>
+              <div class="field numeric-field"><label for="additionalBenefit">Otros beneficios declarados por periodo</label><input id="additionalBenefit" type="number" min="0" step="0.01" value="0"></div>
+            </div></div></details>
+            <p class="inline-note">Usa el volumen actual como operaciones por periodo. El ahorro se calcula con el tiempo evitado y el costo laboral declarado; es una estimación, no un beneficio garantizado.</p>
+          </div>
+          <div>
+            <div class="economics-results">
+              <div class="kpi"><span id="roiCostLabel">Costo de IA por periodo</span><strong id="roiTotalCost">—</strong></div>
+              <div class="kpi"><span id="roiBenefitLabel">Ahorro estimado por periodo</span><strong id="roiBenefit">—</strong></div>
+              <div class="kpi"><span id="roiNetLabel">Valor neto por periodo</span><strong id="roiNetBenefit">—</strong></div>
+              <div class="kpi"><span>Recuperación de inversión</span><strong id="roiPayback">—</strong></div>
+              <div class="kpi"><span>Punto de equilibrio</span><strong id="roiBreakEven">—</strong></div>
+            </div>
+            <div id="roiAudit" class="audit warn"><strong>Estado: pendiente</strong>Completa los tres datos básicos para estimar el valor.</div>
+          </div>
+            </div>
+      </div>
+    </section>
+    <section class="card comparison-card advanced-module" id="economics-section" aria-labelledby="economicsTitle">
+      <div class="card-head module-head"><div><h2 id="economicsTitle">Comparación de proyectos <span class="complexity-badge advanced">Avanzado</span></h2><p>Guarda distintas configuraciones para comparar costos en su moneda original y sobre una base común en USD.</p></div><button id="toggleProjectsModule" class="secondary module-toggle" type="button" aria-expanded="false">Mostrar módulo</button></div>
+      <div id="projectsSectionBody" class="card-body" hidden>
+        <div class="subhead"><div><h3>Comparar proyectos</h3><p class="muted">El proyecto abierto aparece automáticamente. Guárdalo, modifica la calculadora y agrega tantos proyectos como necesites.</p></div></div>
+        <div class="comparison-project-toolbar"><details class="project-help"><summary aria-label="Cómo comparar proyectos" title="¿Cómo se usa la comparación?">i</summary><div class="project-help-panel"><strong>Cómo comparar proyectos</strong><dl><dt>1. Configura el proyecto</dt><dd>Completa textos, modelo, moneda, periodo y volumen.</dd><dt>2. Guarda una referencia</dt><dd>Pulsa “Agregar al comparativo”.</dd><dt>3. Crea otra alternativa</dt><dd>Modifica la calculadora y vuelve a guardar.</dd><dt>4. Revisa y descarga</dt><dd>Activa la gráfica o descarga el informe completo. Los costos se normalizan automáticamente a USD.</dd></dl></div></details><button id="addComparisonProject" class="primary compact-action" type="button">＋ Agregar al comparativo</button><label class="check"><input id="showProjectChart" type="checkbox"> Mostrar gráfica</label><button id="clearProjectComparison" class="secondary compact-action" type="button">↺ Limpiar guardados</button></div>
+        <div id="demoComparisonNotice" class="demo-notice" hidden><span class="demo-notice-icon" aria-hidden="true">✦</span><div><strong>Datos de demostración</strong><small>Estos escenarios son sintéticos y sólo explican cómo funciona la comparación; no constituyen evidencia real.</small></div></div>
+        <div class="comparison-slots">
+          <div id="currentProjectSlot" class="project-slot"><h3>Proyecto actual</h3><p>Completa un cálculo para verlo aquí.</p></div>
+          <div id="savedProjectSlots" class="comparison-slots" style="display:contents"></div>
+        </div>
+        <div id="projectComparisonChart" class="project-chart" hidden></div>
+        <div id="projectComparisonResult" class="insight" hidden></div>
+        <div class="comparison-report-action"><button id="downloadFullReport" class="secondary compact-action" type="button" disabled title="Descarga una página por proyecto y una página final de comparación">↓ Informe completo</button></div>
+      </div>
+    </section>
+    <div class="northern-oath" aria-hidden="true">Estimación documentada · valida antes de presupuestar</div>
+  </main>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const RATE_CATALOG = {
+      'gpt-5.6-sol': { label: 'OpenAI · GPT-5.6 Sol', input: 4, output: 20, date: '2026-10-09', source: 'https://developers.openai.com/api/docs/models/gpt-5.6-sol', note: 'Tarifa oficial estándar: USD 4/M input y USD 20/M output. El proveedor publica condiciones adicionales para contextos superiores a 272K tokens y una vigencia promocional; revísalas antes de presupuestar.' },
+      'gpt-5.4': { label: 'OpenAI · GPT-5.4', input: 2.5, output: 15, date: '2026-10-09', source: 'https://developers.openai.com/api/docs/models/gpt-5.4', note: 'Tarifa oficial estándar: USD 2.50/M input y USD 15/M output. Caché, herramientas y otras modalidades no se incluyen.' },
+      'gpt-5.4-pro': { label: 'OpenAI · GPT-5.4 Pro', input: 30, output: 180, date: '2026-10-09', source: 'https://developers.openai.com/api/docs/models/gpt-5.4-pro', note: 'Tarifa oficial estándar: USD 30/M input y USD 180/M output. Caché, herramientas y otras modalidades no se incluyen.' },
+      'claude-opus-5.5': { label: 'Anthropic · Claude Opus 5.5', input: 4, output: 20, date: '2026-10-09', source: 'https://platform.claude.com/docs/en/about-claude/pricing', note: 'Tarifa estándar global: USD 4/M input y USD 20/M output. No incluye caché, fast mode, batch ni el recargo de residencia de datos.' },
+      'claude-sonnet-5.5': { label: 'Anthropic · Claude Sonnet 5.5', input: 2, output: 10, date: '2026-10-09', source: 'https://platform.claude.com/docs/en/about-claude/pricing', note: 'Tarifa estándar global: USD 2/M input y USD 10/M output. No incluye caché, batch ni el recargo de residencia de datos.' },
+      'claude-opus-5': { label: 'Anthropic · Claude Opus 5', input: 5, output: 25, date: '2026-10-09', source: 'https://platform.claude.com/docs/en/about-claude/pricing', note: 'Tarifa estándar global: USD 5/M input y USD 25/M output. No incluye caché, fast mode, batch ni el recargo de residencia de datos.' },
+      'claude-sonnet-5': { label: 'Anthropic · Claude Sonnet 5', input: 2, output: 10, date: '2026-10-09', source: 'https://platform.claude.com/docs/en/about-claude/pricing', note: 'Tarifa estándar global: USD 2/M input y USD 10/M output. No incluye caché, batch ni cargos adicionales.' },
+      'claude-haiku-4.5': { label: 'Anthropic · Claude Haiku 4.5', input: 1, output: 5, date: '2026-10-09', source: 'https://platform.claude.com/docs/en/about-claude/pricing', note: 'Tarifa estándar global: USD 1/M input y USD 5/M output. No incluye caché, batch ni cargos adicionales.' },
+      'gemini-3.8-flash': { label: 'Google · Gemini 3.8 Flash', input: 0.75, output: 3.75, date: '2026-10-09', source: 'https://ai.google.dev/gemini-api/docs/pricing', note: 'Tarifa estándar promocional hasta el 31/12/2026: USD 0.75/M input y USD 3.75/M output, incluidos tokens de razonamiento en la salida. Después cambia la tarifa.' },
+      'gemini-3.1-pro-preview': { label: 'Google · Gemini 3.1 Pro Preview', input: 2, output: 12, date: '2026-10-09', source: 'https://ai.google.dev/gemini-api/docs/gemini-3', note: 'Tarifa estándar para prompts menores o iguales a 200K: USD 2/M input y USD 12/M output. Para prompts superiores a 200K la tarifa es mayor; esta calculadora no aplica ese tramo automáticamente.' },
+      'gemini-3-flash-preview': { label: 'Google · Gemini 3 Flash Preview', input: 0.5, output: 3, date: '2026-10-09', source: 'https://ai.google.dev/gemini-api/docs/gemini-3', note: 'Tarifa estándar publicada: USD 0.50/M input y USD 3/M output. Es un modelo preview; confirma disponibilidad y precio antes de presupuestar.' },
+      'gemini-2.5-pro': { label: 'Google · Gemini 2.5 Pro', input: 1.25, output: 10, date: '2026-10-09', source: 'https://ai.google.dev/gemini-api/docs/pricing', note: 'Tarifa estándar para prompts menores o iguales a 200K: USD 1.25/M input y USD 10/M output, incluida la salida de razonamiento. Para prompts superiores a 200K la tarifa aumenta.' },
+      'gemini-2.5-flash': { label: 'Google · Gemini 2.5 Flash', input: 0.3, output: 2.5, date: '2026-10-09', source: 'https://ai.google.dev/gemini-api/docs/pricing', note: 'Tarifa estándar para texto, imagen o video de entrada: USD 0.30/M; salida USD 2.50/M, incluidos tokens de razonamiento. Audio y herramientas tienen otros cargos.' },
+      'gemini-2.5-flash-lite': { label: 'Google · Gemini 2.5 Flash-Lite', input: 0.1, output: 0.4, date: '2026-10-09', source: 'https://ai.google.dev/gemini-api/docs/pricing', note: 'Tarifa estándar para texto, imagen o video de entrada: USD 0.10/M; salida USD 0.40/M, incluidos tokens de razonamiento. Audio y herramientas tienen otros cargos.' },
+      'deepseek-flash': { label: 'DeepSeek · DeepSeek V4.1 Flash', input: 0.3, output: 1.2, date: '2026-10-15', source: 'https://api-docs.deepseek.com/quick_start/pricing/', note: 'Tarifa pico conservadora: USD 0.30/M input sin caché y USD 1.20/M output. DeepSeek publica tarifas menores fuera de horario pico y precios distintos para caché; esta calculadora no cambia el precio según la hora.' },
+      'deepseek-v4-pro': { label: 'DeepSeek · DeepSeek V4 Pro', input: 1.32, output: 3.96, date: '2026-10-15', source: 'https://api-docs.deepseek.com/quick_start/pricing/', note: 'Tarifa pico conservadora: USD 1.32/M input sin caché y USD 3.96/M output. Las tarifas fuera de horario pico y los aciertos de caché son menores y no se aplican automáticamente.' },
+      'perplexity-sonar': { label: 'Perplexity · Sonar', input: 0.25, output: 2.5, date: '2026-10-15', source: 'https://docs.perplexity.ai/docs/agent-api/models', note: 'Tarifa de Perplexity Agent API: USD 0.25/M input y USD 2.50/M output. Las herramientas de búsqueda, fetch, imagen y otras invocaciones se facturan por separado y no están incluidas.' },
+      'mistral-large-4': { label: 'Mistral · Mistral Large 4', input: 0.68, output: 2.09, date: '2026-10-15', source: 'https://docs.mistral.ai/inference/pricing', note: 'Precio promocional estándar publicado: USD 0.68/M input y USD 2.09/M output. La página también muestra un precio original superior; verifica que la promoción siga vigente antes de presupuestar.' },
+      'mistral-large-3': { label: 'Mistral · Mistral Large 3', input: 0.5, output: 1.5, date: '2026-10-15', source: 'https://docs.mistral.ai/inference/pricing', note: 'Tarifa estándar: USD 0.50/M input y USD 1.50/M output. No incluye caché, batch, priority ni inferencia regional.' },
+      'mistral-medium-3.5': { label: 'Mistral · Mistral Medium 3.5', input: 1.5, output: 7.5, date: '2026-10-15', source: 'https://docs.mistral.ai/inference/pricing', note: 'Tarifa estándar: USD 1.50/M input y USD 7.50/M output. No incluye caché, batch, priority ni inferencia regional.' },
+      'mistral-small-4': { label: 'Mistral · Mistral Small 4', input: 0.15, output: 0.6, date: '2026-10-15', source: 'https://docs.mistral.ai/inference/pricing', note: 'Tarifa estándar: USD 0.15/M input y USD 0.60/M output. No incluye caché, batch, priority ni inferencia regional.' },
+      'ministral-3-8b': { label: 'Mistral · Ministral 3 8B', input: 0.15, output: 0.15, date: '2026-10-15', source: 'https://docs.mistral.ai/inference/pricing', note: 'Tarifa estándar: USD 0.15/M input y USD 0.15/M output. No incluye caché, batch, priority ni inferencia regional.' },
+      'codestral': { label: 'Mistral · Codestral', input: 0.3, output: 0.9, date: '2026-10-15', source: 'https://docs.mistral.ai/inference/pricing', note: 'Modelo especializado en código: USD 0.30/M input y USD 0.90/M output. Compáralo con modelos generales sólo si el caso de uso es de programación.' }
+    };
+    const RECOMMENDED_MODELS = new Set(['gpt-5.4','claude-sonnet-5.5','gemini-3.8-flash','deepseek-flash','perplexity-sonar','mistral-large-3','mistral-small-4']);
+    const ids = ['project','audience','audienceOther','reportTheme','modelProvider','model','source','priceDate','currency','customCurrency','fxRate','autoFx','volumeMode','volume','budget','budgetPeriod','growthEnabled','growthRate','growthPeriods','roiEnabled','implementationCost','roiPeriods','minutesSaved','hourlyCost','automationRate','additionalBenefit','showProjectChart','inputText','outputText','useManual','manualInput','manualOutput','inputRate','outputRate','fixedRate','comparisonVolume','useProjectFileAsInput','autoSave'];
+    const state = Object.fromEntries(ids.map(id => [id, $(id)]));
+    let lastResult = null;
+    let lastCurrency = 'USD';
+    let fxRequest = 0;
+    let customFxTimer = null;
+    let saveTimer = null;
+    let restoring = false;
+    let projectFileMeta = null;
+    const FX_CACHE_HOURS = 12;
+    const AUTOSAVE_KEY = 'calculadora-costos-ia-project-v2';
+    const PROJECT_COMPARE_KEY = 'calculadora-costos-ia-comparison-v2';
+    const LEGACY_PROJECT_COMPARE_KEY = 'calculadora-costos-ia-comparison-v1';
+    let comparedProjects = [];
+    let projectNormalizationPending = false;
+    let projectNormalizationErrors = [];
+    let customComparisonModels = new Set(RECOMMENDED_MODELS);
+    let selectedComparisonProviders = new Set();
+    let comparisonSelectionCollapsed = false;
+    let valueModuleExpanded = false;
+    let projectsModuleExpanded = false;
+
+    function catalogProvider(model) { return model?.label?.split(' · ')[0] || 'Otro'; }
+    function catalogModelName(model) { return model?.label?.split(' · ').slice(1).join(' · ') || model?.label || ''; }
+    function catalogProviders() { return [...new Set(Object.values(RATE_CATALOG).map(catalogProvider))]; }
+    function providerMark(provider) {
+      const codes = {OpenAI:'◉',Anthropic:'◆',Google:'G',DeepSeek:'∿',Perplexity:'✣',Mistral:'▥'};
+      return `<span class="provider-mark ${escapeHtml(provider.toLowerCase())}" aria-hidden="true">${escapeHtml(codes[provider] || provider.slice(0,2).toUpperCase())}</span>`;
+    }
+    function populateModelSelect(provider, preferred = '') {
+      const models = Object.entries(RATE_CATALOG).filter(([,model]) => catalogProvider(model) === provider);
+      const customOption = workMode() === 'manual' ? '<option value="custom">Tarifa personalizada</option>' : '';
+      state.model.innerHTML = '<option value="">Selecciona un modelo</option>' + models.map(([key,model]) => `<option value="${key}">${escapeHtml(catalogModelName(model))}</option>`).join('') + customOption;
+      state.model.value = models.some(([key]) => key === preferred) || (preferred === 'custom' && workMode() === 'manual') ? preferred : '';
+    }
+    function selectCatalogModel(key) {
+      const preset = RATE_CATALOG[key];
+      const provider = preset ? catalogProvider(preset) : 'Personalizado';
+      state.modelProvider.value = provider;
+      populateModelSelect(provider, preset ? key : 'custom');
+    }
+    function initializeModelControls() {
+      const providers = catalogProviders();
+      state.modelProvider.innerHTML = providers.map(provider => `<option value="${escapeHtml(provider)}">${escapeHtml(provider)}</option>`).join('') + '<option value="Personalizado" disabled hidden>Personalizado</option>';
+      selectedComparisonProviders = new Set(providers);
+      renderProviderChoices();
+      selectCatalogModel('gpt-5.4');
+      renderComparisonModelChoices();
+    }
+    function renderProviderChoices() {
+      const providers = catalogProviders();
+      $('comparisonProviderChoices').innerHTML = providers.map(provider => `<label class="provider-chip"><input type="checkbox" value="${escapeHtml(provider)}" ${selectedComparisonProviders.has(provider) ? 'checked' : ''}>${providerMark(provider)}<span>${escapeHtml(provider)}</span></label>`).join('');
+    }
+    function renderComparisonModelChoices() {
+      const groups = Object.entries(RATE_CATALOG).reduce((result,[key,model]) => {
+        const provider = catalogProvider(model);
+        (result[provider] ||= []).push([key,model]);
+        return result;
+      },{});
+      $('comparisonModelChoices').innerHTML = Object.entries(groups).map(([provider,models]) => `<section class="model-provider-group"><header>${providerMark(provider)}<strong>${escapeHtml(provider)}</strong><span>${models.length} ${models.length === 1 ? 'modelo' : 'modelos'}</span></header><div class="model-option-grid">${models.map(([key,model]) => `<label class="model-option"><input type="checkbox" value="${key}" ${customComparisonModels.has(key) ? 'checked' : ''}><span>${escapeHtml(catalogModelName(model))}</span></label>`).join('')}</div></section>`).join('');
+    }
+    function updateComparisonSelectionUI() {
+      const custom = $('comparisonMode').value === 'custom';
+      $('comparisonProviderPanel').hidden = custom || comparisonSelectionCollapsed;
+      $('comparisonModelPicker').hidden = !custom || comparisonSelectionCollapsed;
+      $('comparisonSelectionSummary').hidden = !comparisonSelectionCollapsed;
+      const count = custom ? customComparisonModels.size : selectedComparisonProviders.size;
+      $('comparisonSelectionCount').textContent = custom
+        ? `${count} ${count === 1 ? 'modelo seleccionado' : 'modelos seleccionados'}.`
+        : `${count} ${count === 1 ? 'proveedor incluido' : 'proveedores incluidos'}.`;
+    }
+    function applyComparisonSelection() {
+      comparisonSelectionCollapsed = true;
+      updateComparisonSelectionUI();
+      renderComparison();
+      $('comparisonTableWrap').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+    function updateModuleVisibility() {
+      const showValue = state.roiEnabled.checked || valueModuleExpanded;
+      const showProjects = projectsModuleExpanded;
+      $('valueSectionBody').hidden = !showValue;
+      $('projectsSectionBody').hidden = !showProjects;
+      $('toggleValueModule').textContent = state.roiEnabled.checked ? 'Quitar evaluación' : 'Configurar evaluación';
+      $('toggleValueModule').setAttribute('aria-expanded', String(showValue));
+      $('toggleProjectsModule').textContent = showProjects ? 'Ocultar' : 'Mostrar módulo';
+      $('toggleProjectsModule').setAttribute('aria-expanded', String(showProjects));
+    }
+    function updateExperienceStatus({ ready, volume, period, total }) {
+      updateModuleVisibility();
+    }
+
+    function firstValue(object, keys) {
+      for (const key of keys) {
+        const found = Object.keys(object || {}).find(candidate => candidate.toLowerCase() === key);
+        if (found && object[found] !== null && object[found] !== undefined) return String(object[found]);
+      }
+      return '';
+    }
+    function parseDelimited(content) {
+      const lines = content.split(/\r?\n/).filter(line => line.trim()); if (lines.length < 2) return null;
+      const delimiter = lines[0].includes('\t') ? '\t' : lines[0].includes(';') ? ';' : ',';
+      const split = line => line.split(delimiter).map(value => value.trim().replace(/^"|"$/g,''));
+      const headers = split(lines[0]), values = split(lines[1]);
+      return Object.fromEntries(headers.map((header,index) => [header, values[index] || '']));
+    }
+    function extractSection(content, labels, stopLabels) {
+      const escaped = labels.map(label => label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+      const stops = stopLabels.map(label => label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+      const match = content.match(new RegExp(`(?:^|\\n)\\s*(?:#{1,4}\\s*)?(?:${escaped})\\s*:?\\s*\\n?([\\s\\S]*?)(?=\\n\\s*(?:#{1,4}\\s*)?(?:${stops})\\s*:?|$)`, 'i'));
+      return match ? match[1].trim() : '';
+    }
+    function detectProjectData(content, fileName) {
+      const fallbackTitle = fileName.replace(/\.[^.]+$/, '').replace(/[-_]+/g,' ').trim();
+      let record = null;
+      try { const parsed = JSON.parse(content); record = Array.isArray(parsed) ? parsed[0] : parsed; }
+      catch { if (/\.csv$/i.test(fileName)) record = parseDelimited(content); }
+      if (!record && /\.xml$/i.test(fileName)) {
+        record = {};
+        const tags = ['project','proyecto','title','titulo','audience','audiencia','destinatario','volume','volumen','calls','llamadas','budget','presupuesto','input','prompt','entrada','output','response','respuesta','salida'];
+        tags.forEach(tag => {
+          const match = content.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
+          if (match && !/<[^>]+>/.test(match[1])) record[tag] = match[1].replace(/\s+/g,' ').trim();
+        });
+        if (!Object.keys(record).length) record = null;
+      }
+      if (!record && /\.ya?ml$/i.test(fileName)) {
+        record = {};
+        let currentKey = '';
+        content.split(/\r?\n/).forEach(line => {
+          const match = line.match(/^([A-Za-zÁÉÍÓÚÜÑáéíóúüñ_ -]+):\s*(.*)$/);
+          if (match) {
+            currentKey = match[1].trim();
+            record[currentKey] = match[2].trim().replace(/^['"]|['"]$/g,'');
+          } else if (currentKey && /^\s+\S/.test(line)) {
+            record[currentKey] = `${record[currentKey]}\n${line.trim()}`.trim();
+          }
+        });
+        if (!Object.keys(record).length) record = null;
+      }
+      if (record && typeof record === 'object') {
+        return {
+          title: firstValue(record,['project','proyecto','title','titulo','título','name','nombre']) || fallbackTitle,
+          input: firstValue(record,['input','prompt','entrada','question','pregunta','request','solicitud']),
+          output: firstValue(record,['output','response','respuesta','answer','salida','expected_output']),
+          audience: firstValue(record,['audience','audiencia','destinatario','cliente','recipient']),
+          volume: firstValue(record,['volume','volumen','calls','llamadas']),
+          budget: firstValue(record,['budget','presupuesto']),
+          method: 'campos estructurados'
+        };
+      }
+      const plain = /\.html?$/i.test(fileName) ? content.replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,'\n') : content;
+      const inputLabels = ['input','prompt','entrada','pregunta','solicitud'];
+      const outputLabels = ['output','respuesta','salida','resultado esperado','expected output'];
+      const input = extractSection(plain,inputLabels,outputLabels);
+      const output = extractSection(plain,outputLabels,inputLabels);
+      const titleMatch = plain.match(/(?:^|\n)\s*(?:#{1,4}\s*)?(?:proyecto|título|titulo|project|title)\s*:\s*(.+)/i);
+      return { title: titleMatch ? titleMatch[1].trim() : fallbackTitle, input: input || (!output ? plain.trim() : ''), output, audience:'', volume:'', budget:'', method: input || output ? 'encabezados detectados' : 'contenido no estructurado' };
+    }
+
+    function workMode() { return $('modeManual').checked ? 'manual' : 'auto'; }
+    function audienceValue() { return state.audience.value === 'other' ? state.audienceOther.value.trim() : state.audience.value; }
+    function reportTheme(themeKey = state.reportTheme.value) {
+      const themes = {
+        executive: { label:'Ejecutiva', title:'Informe ejecutivo de costos de IA', configuration:'Contexto para la decisión', results:'Resultado económico', focus:'Conclusión para la decisión', primary:'#243c4d', accent:'#b88a44', soft:'#f6eddf' },
+        academic: { label:'Académica', title:'Informe metodológico de estimación de costos de IA', configuration:'Método, datos y configuración', results:'Resultados de la estimación', focus:'Interpretación metodológica', primary:'#293f68', accent:'#4d7c8a', soft:'#edf3f7' },
+        operational: { label:'Operativa', title:'Informe operativo de consumo y capacidad de IA', configuration:'Parámetros del escenario operativo', results:'Costo y capacidad operativa', focus:'Implicaciones para la operación', primary:'#245c4b', accent:'#b47b35', soft:'#edf7f2' }
+      };
+      return themes[themeKey] || themes.executive;
+    }
+    function thematicReading(result, theme) {
+      if (theme.label === 'Académica') return `La estimación aplica las tarifas declaradas por millón de tokens al consumo de ${result.tokens.input.toLocaleString('es-MX')} tokens de entrada y ${result.tokens.output.toLocaleString('es-MX')} de salida, y escala linealmente el resultado a ${result.volume.toLocaleString('es-MX')} llamadas. El conteo de tokens está marcado como ${result.tokens.status.toLowerCase()}; por ello, el resultado debe interpretarse como una estimación sujeta a validación con el tokenizador y la facturación del proveedor.`;
+      if (theme.label === 'Operativa') return `Con el escenario actual, cada llamada cuesta ${money(result.perCall,6)} y el volumen de ${result.volume.toLocaleString('es-MX')} llamadas representa ${money(result.total,2)} por ${result.period.label}. Manteniendo constantes tokens y tarifas, el costo crecerá en proporción al volumen; usa el escalamiento para planear capacidad y presupuesto.`;
+      return executiveReading(result).text;
+    }
+    function savedProjectReading(project) {
+      const details = project.details || {};
+      const theme = reportTheme(details.theme || 'executive');
+      const audience = details.audience || 'No especificado';
+      const common = `El escenario estima ${moneyFor(project.total,project.currency,2)} para ${Number(project.volume || 0).toLocaleString('es-MX')} llamadas.`;
+      let text;
+      if (theme.label === 'Académica') text = `${common} Se usaron ${Number(details.inputTokens || 0).toLocaleString('es-MX')} tokens de entrada y ${Number(details.outputTokens || 0).toLocaleString('es-MX')} de salida (${String(details.tokenStatus || 'estado no registrado').toLowerCase()}); la comparación económica no demuestra equivalencia de calidad.`;
+      else if (theme.label === 'Operativa') text = `${common} El costo unitario es ${moneyFor(project.perCall,project.currency,6)} y variará proporcionalmente con el volumen mientras tokens y tarifas permanezcan constantes.`;
+      else if (audience === 'Equipo financiero') text = `${common} La lectura prioriza costo unitario, presupuesto y trazabilidad de tarifas para apoyar la revisión financiera.`;
+      else if (audience === 'Dirección de Operaciones') text = `${common} La lectura prioriza volumen, costo por operación y capacidad de escalamiento.`;
+      else if (audience === 'Equipo técnico') text = `${common} Valida tokenización, caché, herramientas y cargos adicionales antes de adoptar el resultado.`;
+      else text = `${common} La decisión debe considerar calidad, integración y riesgos además del costo.`;
+      if (project.roi) text += ` La evaluación de valor activada estima un valor neto de ${moneyFor(economicValuePerPeriod(project.roi,project.total),project.currency,2)} por periodo bajo supuestos declarados.`;
+      return { theme, audience, text };
+    }
+    function updateAudienceUI() {
+      $('audienceOtherField').hidden = state.audience.value !== 'other';
+      const notes = {
+        'Dirección':'Prioriza costo total, decisión y principales reservas.',
+        'Cliente':'Usa lenguaje claro, resultado y alcance sin detalle técnico innecesario.',
+        'Equipo financiero':'Prioriza presupuesto, costo unitario y sensibilidad económica.',
+        'Dirección de Operaciones':'Prioriza volumen, costo por operación y escalamiento.',
+        'Equipo técnico':'Prioriza tokens, tarifas, fuentes y límites de facturación.',
+        'Docencia o academia':'Prioriza método, supuestos y trazabilidad.',
+        'Uso personal':'Presenta una explicación breve y práctica.'
+      };
+      $('audienceNote').textContent = notes[state.audience.value] || 'Ajusta el énfasis de la lectura ejecutiva y del informe; no modifica los cálculos.';
+    }
+    function setAudience(value) {
+      const option = Array.from(state.audience.options || []).some(item => item.value === value);
+      state.audience.value = option ? value : value ? 'other' : '';
+      state.audienceOther.value = option ? '' : value;
+      updateAudienceUI();
+    }
+    function executiveReading(result) {
+      if (!result) return { title:'Lectura ejecutiva', text:'Completa los datos para identificar el principal impulsor del costo y una oportunidad de ahorro.' };
+      const driver = [{label:'los tokens de salida',value:result.outputCost},{label:'los tokens de entrada',value:result.inputCost},{label:'el cargo fijo',value:result.fixed}].sort((a,b)=>b.value-a.value)[0].label;
+      const saving = result.outputCost * .2 * result.exchange * result.volume;
+      const audience = audienceValue();
+      const common = `El costo estimado es ${money(result.total,2)} para ${result.volume.toLocaleString('es-MX')} llamadas.`;
+      if (audience === 'Equipo financiero') return { title:'Lectura para Finanzas', text:`${common} El costo unitario es ${money(result.perCall,6)}${result.budget > 0 && result.budgetUsage !== null ? ` y utiliza ${result.budgetUsage.toFixed(1)}% del límite declarado` : ''}. Reducir 20% los tokens de salida representa una sensibilidad de ${money(saving,2)}, no un ahorro garantizado.` };
+      if (audience === 'Dirección de Operaciones') return { title:'Lectura para Operaciones', text:`${common} El principal impulsor es ${driver}; el costo crecerá en proporción directa al volumen mientras tokens y tarifas permanezcan constantes.` };
+      if (audience === 'Equipo técnico') return { title:'Lectura para el equipo técnico', text:`Se calcularon ${result.tokens.input.toLocaleString('es-MX')} tokens de entrada y ${result.tokens.output.toLocaleString('es-MX')} de salida (${result.tokens.status.toLowerCase()}). El principal impulsor es ${driver}; valida tokenización, caché, herramientas y razonamiento con el proveedor.` };
+      if (audience === 'Cliente') return { title:'Lectura para el cliente', text:`${common} Es una estimación de consumo de API basada en el escenario proporcionado y no incluye beneficios, calidad del modelo ni cargos adicionales no declarados.` };
+      if (audience === 'Docencia o academia') return { title:'Lectura metodológica', text:`${common} Se aplicó costo por millón de tokens y escalamiento lineal; los tokens ${result.tokens.status === 'Manual' ? 'fueron declarados manualmente' : 'son una estimación local'} y deben validarse antes de concluir.` };
+      if (audience === 'Dirección') return { title:'Lectura para Dirección', text:`${common} El principal impulsor es ${driver}. La decisión debe considerar también calidad, riesgo, integración y cargos excluidos, no sólo el menor precio.` };
+      if (audience && audience !== 'Uso personal') return { title:`Lectura para ${audience}`, text:`${common} El principal impulsor es ${driver}; valida los supuestos y cargos excluidos antes de decidir.` };
+      return { title:'Lectura ejecutiva', text:`${common} El principal impulsor es ${driver}. Reducir 20% los tokens de salida representa una sensibilidad de ${money(saving,2)}, no un ahorro garantizado.` };
+    }
+    function updateVolumeUI(options = {}) {
+      const custom = state.volumeMode.value === 'custom';
+      $('volumeQuickField').hidden = custom; $('volumeCustomField').hidden = !custom;
+      if (!custom && options.sync !== false) state.volume.value = state.comparisonVolume.value;
+      $('volumeNote').textContent = custom ? 'El cálculo utilizará el número específico de llamadas.' : 'El cálculo utilizará el volumen rápido seleccionado.';
+      calculate();
+    }
+    function roiMetrics(result = lastResult) {
+      if (!result || !state.roiEnabled.checked) return null;
+      const periods = Math.max(1, integer(state.roiPeriods));
+      const implementation = Math.max(0, num(state.implementationCost));
+      const minutes = Math.max(0, num(state.minutesSaved));
+      const hourly = Math.max(0, num(state.hourlyCost));
+      const automated = Math.min(100, Math.max(0, num(state.automationRate))) / 100;
+      const additional = Math.max(0, num(state.additionalBenefit));
+      const laborBenefitPerCall = minutes / 60 * hourly * automated;
+      const benefitPerPeriod = result.volume * laborBenefitPerCall + additional;
+      const totalBenefit = benefitPerPeriod * periods;
+      const aiCost = result.total * periods;
+      const totalCost = implementation + aiCost;
+      const netBenefit = totalBenefit - totalCost;
+      const roi = totalCost > 0 ? netBenefit / totalCost * 100 : null;
+      const operatingNet = benefitPerPeriod - result.total;
+      const payback = implementation === 0 ? 0 : operatingNet > 0 ? implementation / operatingNet : null;
+      const marginPerCall = laborBenefitPerCall - result.perCall;
+      const breakEvenCalls = implementation === 0 ? 0 : marginPerCall > 0 ? Math.ceil(implementation / marginPerCall) : null;
+      return { periods, implementation, minutes, hourly, automated, additional, laborBenefitPerCall, benefitPerPeriod, totalBenefit, aiCost, totalCost, operatingNet, netBenefit, roi, payback, breakEvenCalls };
+    }
+    function renderRoi() {
+      const enabled = state.roiEnabled.checked; $('roiModule').hidden = !enabled;
+      const metrics = roiMetrics();
+      const values = metrics ? [money(lastResult.total,2), money(metrics.benefitPerPeriod,2), money(metrics.operatingNet,2), metrics.payback === null ? 'No recuperable' : `${metrics.payback.toFixed(1)} periodos`, metrics.breakEvenCalls === null ? 'No alcanzable' : `${metrics.breakEvenCalls.toLocaleString('es-MX')} operaciones`] : ['—','—','—','—','—'];
+      ['roiTotalCost','roiBenefit','roiNetBenefit','roiPayback','roiBreakEven'].forEach((id,index) => $(id).textContent = values[index]);
+      const audit = $('roiAudit');
+      if (!metrics || metrics.minutes <= 0 || metrics.hourly <= 0) { audit.className='audit warn'; audit.innerHTML='<strong>Estado: pendiente</strong>Indica minutos ahorrados y costo laboral por hora. La inversión inicial puede ser cero.'; }
+      else { audit.className = metrics.operatingNet > 0 ? 'audit' : 'audit warn'; audit.innerHTML = `<strong>Estado: ${metrics.operatingNet > 0 ? 'genera valor bajo los supuestos' : 'el ahorro no cubre el costo de IA'}</strong>Valor neto estimado de ${money(metrics.operatingNet,2)} por periodo. Los tiempos y costos laborales son datos declarados y deben validarse.`; }
+      return metrics;
+    }
+    function comparisonSnapshot() {
+      if (!lastResult) return null;
+      const preset = RATE_CATALOG[state.model.value];
+      const code = currency(), cached = code === 'USD' ? null : cachedRate(code);
+      return { name: state.project.value.trim() || 'Proyecto sin nombre', model: preset ? preset.label : 'Tarifa personalizada', currency: code, exchange: lastResult.exchange, fxDate: cached?.date || new Date().toISOString().slice(0,10), fxSource: code === 'USD' ? 'USD base' : cached?.source || 'Tipo de cambio registrado en la calculadora', volume: lastResult.volume, period: scenarioPeriod().label, perCall: lastResult.perCall, total: lastResult.total, perCallUsd: lastResult.perCallUsd, totalUsd: lastResult.perCallUsd * lastResult.volume, roi: roiMetrics(), savedAt: new Date().toISOString(), details: { audience: audienceValue() || 'No especificado', theme: state.reportTheme.value, themeLabel: reportTheme().label, mode: workMode() === 'auto' ? 'Autónomo' : 'Manual', source: state.source.value, priceDate: state.priceDate.value, inputTokens: lastResult.tokens.input, outputTokens: lastResult.tokens.output, tokenStatus: lastResult.tokens.status, inputRate: lastResult.inputRate, outputRate: lastResult.outputRate, fixedRate: lastResult.fixed, budget: lastResult.budget, period: scenarioPeriod().label } };
+    }
+    function projectCard(data, label, index = null) {
+      if (!data) return `<h3>${label}</h3><p>Completa un cálculo para verlo aquí.</p>`;
+      const remove = index === null ? '' : `<div class="slot-actions"><button class="secondary remove-compared-project" type="button" data-index="${index}" aria-label="Quitar ${escapeHtml(data.name)} de la comparación">Quitar</button></div>`;
+      const reading = savedProjectReading(data);
+      return `<h3>${label} · ${escapeHtml(data.name)}</h3><p>${escapeHtml(data.model)}</p><p><strong>${data.volume.toLocaleString('es-MX')} llamadas ${data.period ? `por ${escapeHtml(data.period)}` : ''}</strong> · ${moneyFor(data.total,data.currency,2)}${hasUsdBase(data) && data.currency !== 'USD' ? ` · base ${moneyFor(data.totalUsd,'USD',2)}` : ''}</p><p>Costo por llamada: ${moneyFor(data.perCall,data.currency,6)}</p><p><strong>${escapeHtml(reading.theme.label)} · ${escapeHtml(reading.audience)}</strong><br>${escapeHtml(reading.text)}</p>${data.roi ? `<p>Evaluación de valor incluida · valor neto por periodo: <strong>${moneyFor(economicValuePerPeriod(data.roi,data.total),data.currency,2)}</strong></p>` : '<p>Evaluación de valor no incluida.</p>'}${remove}`;
+    }
+    function moneyFor(value, code, digits=2) { try { return new Intl.NumberFormat('es-MX',{style:'currency',currency:code,currencyDisplay:'code',minimumFractionDigits:digits,maximumFractionDigits:digits}).format(value); } catch { return `${code} ${Number(value).toFixed(digits)}`; } }
+    function reportDate(value) {
+      if (!value) return 'Sin fecha';
+      const dateOnly = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (dateOnly) return `${dateOnly[3]}/${dateOnly[2]}/${dateOnly[1]}`;
+      const parsed = new Date(value);
+      return Number.isNaN(parsed.getTime()) ? String(value) : new Intl.DateTimeFormat('es-MX',{day:'2-digit',month:'2-digit',year:'numeric'}).format(parsed);
+    }
+    function economicValuePerPeriod(metrics, projectTotal) { return Number.isFinite(metrics?.operatingNet) ? metrics.operatingNet : (Number(metrics?.benefitPerPeriod) || 0) - projectTotal; }
+    function hasUsdBase(project) { return Number.isFinite(project?.totalUsd) && Number.isFinite(project?.perCallUsd); }
+    async function normalizeStoredProjects() {
+      const pending = comparedProjects.filter(project => project && !hasUsdBase(project) && /^[A-Z]{3}$/.test(project.currency || ''));
+      if (!pending.length || projectNormalizationPending) return;
+      projectNormalizationPending = true; projectNormalizationErrors = []; renderProjectComparison();
+      const rates = new Map();
+      await Promise.all([...new Set(pending.map(project => project.currency))].map(async code => {
+        try {
+          if (code === 'USD') { rates.set(code,{rate:1,date:'No aplica',source:'USD base'}); return; }
+          const cached = cachedRate(code);
+          const data = cached || await resolveExchangeRate(code);
+          rates.set(code,data);
+          if (!cached) localStorage.setItem(`fx-usd-${code}`,JSON.stringify({rate:data.rate,date:data.date,savedAt:Date.now(),source:data.source}));
+        } catch (error) { projectNormalizationErrors.push(`${code}: ${error.message}`); }
+      }));
+      pending.forEach(project => {
+        const data = rates.get(project.currency);
+        if (!data || !Number.isFinite(data.rate) || data.rate <= 0) return;
+        project.exchange = data.rate; project.perCallUsd = project.perCall / data.rate; project.totalUsd = project.total / data.rate;
+        project.fxDate = data.date; project.fxSource = data.source; project.normalizedAt = new Date().toISOString();
+      });
+      projectNormalizationPending = false;
+      localStorage.setItem(PROJECT_COMPARE_KEY,JSON.stringify(comparedProjects));
+      renderProjectComparison();
+    }
+    function renderProjectChart(current) {
+      const chart = $('projectComparisonChart');
+      chart.hidden = !state.showProjectChart.checked;
+      if (chart.hidden) return;
+      if (!current) { chart.innerHTML='<h4>Comparación visual de costos</h4><p class="chart-note">Completa el cálculo actual para generar la gráfica.</p>'; return; }
+      const projects = [current,...comparedProjects];
+      const comparable = projects.filter(hasUsdBase);
+      const excluded = projects.length - comparable.length;
+      const ordered = comparable.map(project => ({...project,current:project === current})).sort((a,b) => b.totalUsd-a.totalUsd);
+      const max = Math.max(...ordered.map(project => project.totalUsd),0);
+      const bars = ordered.map(project => `<div class="project-bar${project.current ? ' current' : ''}" aria-label="${escapeHtml(project.name)}: ${moneyFor(project.totalUsd,'USD',2)}"><span class="project-bar-label">${project.current ? 'Actual · ' : ''}${escapeHtml(project.name)}</span><span class="project-bar-track"><span class="project-bar-fill" style="width:${max > 0 ? project.totalUsd/max*100 : 0}%"></span></span><span class="project-bar-value">${moneyFor(project.totalUsd,'USD',2)}</span></div>`).join('');
+      const status = projectNormalizationPending ? ' · normalizando monedas automáticamente…' : excluded ? ` · ${excluded} pendiente${excluded===1?'':'s'} por no poder obtener su tipo de cambio` : '';
+      chart.innerHTML=`<h4>¿Qué proyecto tiene mayor costo total?</h4><p class="chart-note">Base común: USD · barras desde cero · orden descendente${status}</p><div role="img" aria-label="Comparación de costos totales normalizados a dólares estadounidenses">${bars}</div>`;
+    }
+    function renderProjectComparison() {
+      const current = comparisonSnapshot();
+      $('downloadFullReport').disabled = !current || !comparedProjects.length;
+      $('currentProjectSlot').innerHTML = projectCard(current,'Proyecto actual');
+      $('savedProjectSlots').innerHTML = comparedProjects.length
+        ? comparedProjects.map((project,index) => `<div class="project-slot">${projectCard(project,`Proyecto guardado ${index + 1}`,index)}</div>`).join('')
+        : '<div class="project-slot"><h3>Proyectos guardados</h3><p>Todavía no agregas otro proyecto.</p></div>';
+      renderProjectChart(current);
+      const result = $('projectComparisonResult');
+      if (!current || !comparedProjects.length) { result.hidden=true; return; }
+      const rows = comparedProjects.map((project,index) => {
+        if (!hasUsdBase(project)) return `<tr><td>Guardado ${index + 1} · ${escapeHtml(project.name)}</td><td>${moneyFor(project.total,project.currency,2)}</td><td colspan="2">${projectNormalizationPending ? 'Normalizando automáticamente…' : 'No se pudo obtener el tipo de cambio'}</td></tr>`;
+        const delta = project.totalUsd - current.totalUsd;
+        const pct = current.totalUsd === 0 ? null : delta / current.totalUsd * 100;
+        return `<tr><td>Guardado ${index + 1} · ${escapeHtml(project.name)}</td><td>${moneyFor(project.total,project.currency,2)} <small>· ${moneyFor(project.totalUsd,'USD',2)}<br>${escapeHtml(project.fxSource || 'Tipo de cambio')} · ${escapeHtml(project.fxDate || 'sin fecha')}</small></td><td>${delta >= 0 ? '+' : '−'}${moneyFor(Math.abs(delta),'USD',2)}</td><td>${pct === null ? '—' : `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`}</td></tr>`;
+      }).join('');
+      result.hidden=false; result.innerHTML=`<strong>Comparación frente al proyecto actual</strong><div class="table-wrap"><table><thead><tr><th>Proyecto guardado</th><th>Costo original y base USD</th><th>Diferencia en USD</th><th>Diferencia %</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    }
+    function projectComparisonReportHtml(options = {}) {
+      const current = comparisonSnapshot();
+      if (!current || !comparedProjects.length) return '';
+      const projects = [current,...comparedProjects];
+      const reference = current;
+      const rows = projects.map((project,index) => {
+        let difference = 'Referencia';
+        if (index > 0) difference = !hasUsdBase(project) ? 'Conversión pendiente' : `${project.totalUsd - reference.totalUsd >= 0 ? '+' : '-'}${moneyFor(Math.abs(project.totalUsd-reference.totalUsd),'USD',2)}${reference.totalUsd === 0 ? '' : ` (${(project.totalUsd/reference.totalUsd*100-100).toFixed(1)}%)`}`;
+        const reading = savedProjectReading(project);
+        return `<tr><td><strong>${index === 0 ? 'Actual' : `Guardado ${index}`}</strong><br>${escapeHtml(project.name)}<br><small>${escapeHtml(project.model)}</small></td><td>${escapeHtml(reading.theme.label)}<br><small>${escapeHtml(reading.audience)}</small></td><td>${project.volume.toLocaleString('es-MX')} llamadas<br><small>${escapeHtml(project.period || 'Periodo no registrado')}</small></td><td>${moneyFor(project.total,project.currency,2)}<br><small>${moneyFor(project.perCall,project.currency,6)} por llamada</small></td><td>${hasUsdBase(project) ? moneyFor(project.totalUsd,'USD',2) : 'Pendiente'}</td><td>${difference}</td><td>${project.roi ? moneyFor(economicValuePerPeriod(project.roi,project.total),project.currency,2) : 'No incluida'}</td></tr>`;
+      }).join('');
+      const traceRows = projects.map((project,index) => `<tr><td>${index===0?'Actual':`Guardado ${index}`} · ${escapeHtml(project.name)}</td><td>${escapeHtml(project.currency)}</td><td>${Number.isFinite(project.exchange) ? `1 USD = ${Number(project.exchange).toLocaleString('es-MX',{maximumFractionDigits:6})} ${escapeHtml(project.currency)}` : 'No disponible'}</td><td>${escapeHtml(project.fxSource || 'No disponible')}</td><td>${escapeHtml(reportDate(project.fxDate))}</td></tr>`).join('');
+      const comparable = projects.filter(hasUsdBase).sort((a,b) => b.totalUsd-a.totalUsd);
+      const max = Math.max(...comparable.map(project => project.totalUsd),0);
+      const reportChart = (options.forceChart || state.showProjectChart.checked) ? `<h3 style="color:#34448f">Comparación visual del costo total · base USD</h3><p style="font-size:12px;color:#506476">Barras horizontales desde cero, ordenadas de mayor a menor.</p>${comparable.map(project => `<div class="report-bar"><span>${escapeHtml(project.name)}</span><span class="report-bar-track"><span style="width:${max>0?project.totalUsd/max*100:0}%;background:#5367c4"></span></span><strong>${moneyFor(project.totalUsd,'USD',2)}</strong></div>`).join('')}` : '';
+      const interpretations = projects.map((project,index) => { const reading=savedProjectReading(project); return `<div class="note" style="background:#eef1ff;border-left-color:#5367c4"><strong>${index===0?'Actual':`Guardado ${index}`} · ${escapeHtml(project.name)} · ${escapeHtml(reading.theme.label)} para ${escapeHtml(reading.audience)}</strong><br>${escapeHtml(reading.text)}</div>`; }).join('');
+      return `<h2 style="color:#34448f">Comparación de proyectos</h2>${reportChart}<table class="comparison-table"><thead><tr><th>Proyecto y modelo</th><th>Temática y audiencia</th><th>Escenario</th><th>Costo original</th><th>Costo en USD</th><th>Diferencia vs. actual</th><th>Valor neto del periodo propio</th></tr></thead><tbody>${rows}</tbody></table><h3 style="color:#34448f">Trazabilidad de la conversión</h3><table class="trace-table"><thead><tr><th>Proyecto</th><th>Moneda</th><th>Tipo de cambio</th><th>Fuente</th><th>Fecha</th></tr></thead><tbody>${traceRows}</tbody></table><h2 style="color:#34448f">Interpretación por proyecto</h2>${interpretations}<div class="note" style="background:#eef1ff;border-left-color:#5367c4"><strong>Alcance de la comparación.</strong> El proyecto abierto es la referencia. Los costos se conservan en su moneda seleccionada y se normalizan a USD. Como cada escenario puede tener distinto volumen y periodo, las diferencias reflejan la configuración completa y no sólo el modelo. El valor neto corresponde al periodo propio de cada proyecto y no debe compararse directamente entre periodos diferentes. La fuente y la fecha del tipo de cambio se muestran por separado para facilitar su revisión.</div>`;
+    }
+    function saveComparedProject() {
+      const snapshot = comparisonSnapshot(); if (!snapshot) { alert('Completa primero un cálculo válido.'); return; }
+      $('demoComparisonNotice').hidden = true;
+      comparedProjects.push(snapshot); localStorage.setItem(PROJECT_COMPARE_KEY,JSON.stringify(comparedProjects)); renderProjectComparison();
+    }
+    function removeComparedProject(index) { comparedProjects.splice(index,1); localStorage.setItem(PROJECT_COMPARE_KEY,JSON.stringify(comparedProjects)); renderProjectComparison(); }
+    function restoreComparedProjects() {
+      try {
+        const saved=JSON.parse(localStorage.getItem(PROJECT_COMPARE_KEY));
+        if (Array.isArray(saved)) comparedProjects=saved.filter(Boolean);
+        else {
+          const legacy=JSON.parse(localStorage.getItem(LEGACY_PROJECT_COMPARE_KEY));
+          if (legacy && typeof legacy==='object') comparedProjects=[legacy.a,legacy.b].filter(Boolean);
+        }
+      } catch {}
+      renderProjectComparison();
+      normalizeStoredProjects();
+    }
+    function setWorkMode(mode, options = {}) {
+      const manual = mode === 'manual';
+      const previousProvider = state.modelProvider.value;
+      const previousModel = state.model.value;
+      $('modeManual').checked = manual; $('modeAuto').checked = !manual;
+      document.body.classList.toggle('mode-manual', manual);
+      document.body.classList.toggle('mode-auto', !manual);
+      const customProviderOption = state.modelProvider.querySelector('option[value="Personalizado"]');
+      if (customProviderOption) { customProviderOption.disabled = !manual; customProviderOption.hidden = !manual; }
+      $('modeDescription').textContent = manual
+        ? 'Permite editar tokens, tarifas, fuente, fecha y cargos para auditar o construir escenarios propios.'
+        : 'Completa lo esencial: la calculadora aplica tarifas documentadas, calcula al instante, actualiza moneda y guarda la sesión.';
+      if (!manual) {
+        state.autoFx.checked = true;
+        state.useManual.checked = false;
+        $('manualTokens').classList.remove('active');
+        if (!previousModel || previousModel === 'custom' || previousProvider === 'Personalizado') { selectCatalogModel('gpt-5.4'); applyModel(); }
+        else populateModelSelect(previousProvider, previousModel);
+      } else {
+        state.modelProvider.value = previousProvider || catalogProviders()[0];
+        populateModelSelect(state.modelProvider.value, previousModel);
+      }
+      if (!options.skipSave) scheduleSave();
+      calculate();
+    }
+
+    function projectSnapshot() {
+      const fields = {};
+      ids.forEach(id => { const el = state[id]; fields[id] = el.type === 'checkbox' ? el.checked : el.value; });
+      return { schema: 'calculadora-costos-ia/v2', savedAt: new Date().toISOString(), mode: workMode(), fields, projectFileName: projectFileMeta ? projectFileMeta.name : '' };
+    }
+    function setSaveStatus(message) { $('saveStatus').textContent = message; }
+    function saveSession() {
+      if (restoring || !state.autoSave.checked) return;
+      try { localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(projectSnapshot())); setSaveStatus(`Guardado local · ${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}`); }
+      catch { setSaveStatus('No fue posible guardar la sesión en este navegador.'); }
+    }
+    function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveSession, 350); }
+    function applySnapshot(data) {
+      if (!data || data.schema !== 'calculadora-costos-ia/v2' || !data.fields || typeof data.fields !== 'object') throw new Error('Formato de proyecto no compatible.');
+      restoring = true;
+      setWorkMode(data.mode === 'manual' ? 'manual' : 'auto', { skipSave: true });
+      ids.forEach(id => {
+        if (!(id in data.fields) || !state[id]) return;
+        if (state[id].type === 'checkbox') state[id].checked = Boolean(data.fields[id]);
+        else state[id].value = String(data.fields[id] ?? '');
+      });
+      if (RATE_CATALOG[state.model.value]) selectCatalogModel(state.model.value);
+      else if (state.model.value === 'custom') selectCatalogModel('custom');
+      if (/^Ejemplo ficticio\b/i.test(state.project.value.trim())) state.project.value = '';
+      if (data.fields.audience && !state.audience.value) setAudience(String(data.fields.audience));
+      if (!data.fields.volumeMode) {
+        const restoredVolume = String(state.volume.value || '1000');
+        if (['1000','10000','1000000'].includes(restoredVolume)) { state.volumeMode.value = 'quick'; state.comparisonVolume.value = restoredVolume; }
+        else state.volumeMode.value = 'custom';
+      }
+      projectFileMeta = data.projectFileName ? { name: data.projectFileName, size: 0, content: '' } : null;
+      setProjectFileStatus(data.projectFileName ? `${data.projectFileName} · referencia restaurada; vuelve a cargarlo para leer su contenido.` : 'Ningún archivo cargado.');
+      applyModel(); updateCurrencyUI(); updateAudienceUI(); updateVolumeUI({ sync: false });
+      $('manualTokens').classList.toggle('active', state.useManual.checked);
+      restoring = false; calculate(); scheduleSave();
+    }
+    function restoreSession() {
+      try { const raw = localStorage.getItem(AUTOSAVE_KEY); if (raw) { applySnapshot(JSON.parse(raw)); setSaveStatus('Sesión anterior recuperada automáticamente.'); return true; } }
+      catch { localStorage.removeItem(AUTOSAVE_KEY); }
+      return false;
+    }
+    function downloadBlob(content, type, filename) {
+      const blob = new Blob([content], {type}); const url = URL.createObjectURL(blob); const link = document.createElement('a');
+      link.href = url; link.download = filename; link.style.display = 'none'; document.body.appendChild(link); link.click();
+      setTimeout(() => { link.remove(); URL.revokeObjectURL(url); }, 1500);
+    }
+    function projectSlug(fallback = 'proyecto-ia') { return (state.project.value || fallback).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || fallback; }
+    function exportProject() { downloadBlob(JSON.stringify(projectSnapshot(), null, 2), 'application/json;charset=utf-8', `${projectSlug()}-configuracion.json`); setSaveStatus('Proyecto descargado en formato JSON.'); }
+    async function importProject() {
+      const file = $('configFile').files[0]; if (!file) return;
+      try {
+        if (file.size > 2 * 1024 * 1024) throw new Error('El archivo supera 2 MB.');
+        const raw = await file.text(), data = JSON.parse(raw);
+        if (data?.schema === 'calculadora-costos-ia/v2' && data?.fields) applySnapshot(data);
+        else {
+          const detected = detectProjectData(raw,file.name);
+          const useful = detected.input || detected.output || detected.volume || detected.budget || detected.audience || Object.keys(data || {}).some(key => ['proyecto','project','titulo','title'].includes(key.toLowerCase()));
+          if (!useful) throw new Error('El JSON no contiene una configuración guardada ni campos reconocibles del proyecto.');
+          applyProjectContent(raw,file.name,file.size,'JSON de proyecto');
+        }
+        setSaveStatus(`Proyecto abierto: ${file.name}`);
+      }
+      catch (error) { alert(`No fue posible abrir el proyecto. ${error.message}`); }
+      finally { $('configFile').value = ''; }
+    }
+
+    function wordsToTokens(text) {
+      const trimmed = text.trim();
+      if (!trimmed) return 0;
+      // Estimación explícita: 1.3 tokens por palabra. No reemplaza el tokenizador del proveedor.
+      return Math.ceil((trimmed.match(/\S+/g) || []).length * 1.3);
+    }
+    function num(el) { const value = Number.parseFloat(el.value); return Number.isFinite(value) ? value : 0; }
+    function integer(el) { const value = Number.parseInt(el.value, 10); return Number.isFinite(value) && value >= 0 ? value : 0; }
+    function currency() { return state.currency.value === 'custom' ? state.customCurrency.value.trim().toUpperCase() : state.currency.value; }
+    function fx() { return currency() === 'USD' ? 1 : Math.max(0, num(state.fxRate)); }
+    function scenarioPeriod() {
+      const value = state.budgetPeriod.value || 'proyecto';
+      const periods = {
+        proyecto: { label:'proyecto completo', singular:'proyecto', plural:'proyectos', adjective:'del proyecto', current:'Escenario actual' },
+        'día': { label:'día', singular:'día', plural:'días', adjective:'diaria', current:'Día actual' },
+        semana: { label:'semana', singular:'semana', plural:'semanas', adjective:'semanal', current:'Semana actual' },
+        mes: { label:'mes', singular:'mes', plural:'meses', adjective:'mensual', current:'Mes actual' },
+        'año': { label:'año', singular:'año', plural:'años', adjective:'anual', current:'Año actual' }
+      };
+      const meta = periods[value] || periods.proyecto;
+      return { value, ...meta, suffix: value === 'proyecto' ? 'en el proyecto' : `por ${meta.singular}`, compact: `llamadas/${meta.singular}` };
+    }
+    function money(value, digits = 2) {
+      if (!Number.isFinite(value)) return '—';
+      const code = currency();
+      if (!/^[A-Z]{3}$/.test(code)) return `${value.toFixed(digits)} ${code || 'MON'}`;
+      try { return new Intl.NumberFormat('es-MX', { style: 'currency', currency: code, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value); }
+      catch { return `${value.toFixed(digits)} ${code}`; }
+    }
+    function updateEstimates() {
+      const inputTokens = wordsToTokens(state.inputText.value);
+      const outputTokens = wordsToTokens(state.outputText.value);
+      $('inputEstimate').innerHTML = inputTokens ? `Input estimado local: <strong>${inputTokens.toLocaleString('es-MX')} tokens</strong>` : 'Input: sin texto.';
+      $('outputEstimate').innerHTML = outputTokens ? `Output estimado local: <strong>${outputTokens.toLocaleString('es-MX')} tokens</strong>` : 'Output: sin texto.';
+    }
+    function tokenValues() {
+      if (state.useManual.checked) return { input: integer(state.manualInput), output: integer(state.manualOutput), status: 'Manual' };
+      return { input: wordsToTokens(state.inputText.value), output: wordsToTokens(state.outputText.value), status: 'Estimado' };
+    }
+    function renderRows(perCall) {
+      const scales = [['Por llamada', 1], ['1,000 llamadas', 1000], ['10,000 llamadas', 10000], ['1,000,000 llamadas', 1000000]];
+      $('scaleRows').innerHTML = scales.map(([label, mult]) => `<tr><td>${label}</td><td>${money(perCall * mult, mult === 1 ? 6 : 2)}</td></tr>`).join('');
+    }
+    function comparisonData() {
+      if (!lastResult || !state.model.value) return [];
+      const r = lastResult;
+      const selectedPreset = RATE_CATALOG[state.model.value];
+      const selectedKey = state.model.value;
+      let rows = Object.entries(RATE_CATALOG).map(([key, model]) => {
+        const perCallUsd = (r.tokens.input * model.input + r.tokens.output * model.output) / 1000000 + r.fixed;
+        return { key, label: model.label, provider: catalogProvider(model), perCall: perCallUsd * r.exchange, total: perCallUsd * r.exchange * r.volume, reference: key === selectedKey };
+      });
+      if (!selectedPreset) rows.push({ key: 'custom-reference', label: 'Tarifa personalizada', provider: 'Personalizado', perCall: r.perCall, total: r.total, reference: true });
+      const mode = $('comparisonMode').value;
+      if (mode === 'recommended') rows = rows.filter(row => row.reference || RECOMMENDED_MODELS.has(row.key));
+      if (mode === 'custom') rows = rows.filter(row => row.reference || customComparisonModels.has(row.key));
+      const reference = rows.find(row => row.reference);
+      if (!reference) return [];
+      rows.forEach(row => {
+        row.difference = row.total - reference.total;
+        row.percentage = reference.total === 0 ? null : (row.total / reference.total - 1) * 100;
+      });
+      return rows;
+    }
+    function visibleComparisonData() {
+      const rows = comparisonData();
+      if ($('comparisonMode').value === 'custom') return rows;
+      return rows.filter(row => row.reference || selectedComparisonProviders.has(row.provider));
+    }
+    function renderComparison() {
+      let rows = visibleComparisonData();
+      const empty = $('comparisonEmpty'), wrap = $('comparisonTableWrap');
+      if (!rows.length) {
+        empty.hidden = false; wrap.hidden = true; $('comparisonRows').innerHTML = ''; return;
+      }
+      const sort = $('comparisonSort').value;
+      if (sort === 'difference') rows.sort((a, b) => Math.abs(a.difference) - Math.abs(b.difference));
+      else if (sort === 'provider') rows.sort((a, b) => `${a.provider} ${a.label}`.localeCompare(`${b.provider} ${b.label}`, 'es'));
+      else rows.sort((a, b) => a.total - b.total);
+      const best = Math.min(...rows.map(row => row.total));
+      $('comparisonRows').innerHTML = rows.map(row => {
+        const diff = row.reference ? 'Referencia' : `${row.difference > 0 ? '+' : ''}${money(row.difference, 2)}`;
+        const pct = row.reference || row.percentage === null ? '—' : `${row.percentage > 0 ? '+' : ''}${row.percentage.toFixed(1)}%`;
+        const classes = `${row.reference ? 'reference-row ' : ''}${row.total === best ? 'best-row' : ''}`.trim();
+        return `<tr class="${classes}"><td>${escapeHtml(row.label)}${row.reference ? '<span class="reference-badge">Seleccionado</span>' : ''}${row.total === best ? '<span class="best-badge">Menor costo</span>' : ''}</td><td><span class="provider-cell">${providerMark(row.provider)}${escapeHtml(row.provider)}</span></td><td>${money(row.perCall, 6)}</td><td>${money(row.total, 2)}</td><td>${diff}</td><td>${pct}</td></tr>`;
+      }).join('');
+      empty.hidden = true; wrap.hidden = false;
+    }
+    function applyModel() {
+      const preset = RATE_CATALOG[state.model.value];
+      const custom = state.model.value === 'custom' || !preset;
+      if (state.model.value === 'custom' && workMode() !== 'manual') setWorkMode('manual');
+      $('customRateHelp').hidden = state.model.value !== 'custom';
+      [state.source, state.priceDate, state.inputRate, state.outputRate].forEach(el => el.readOnly = !custom && !!preset);
+      if (preset) {
+        state.source.value = preset.source; state.priceDate.value = preset.date;
+        state.inputRate.value = preset.input; state.outputRate.value = preset.output;
+        $('officialRateLink').href = preset.source; $('officialRateLink').textContent = `Ver tarifa oficial de ${preset.label} ↗`;
+        $('modelNote').textContent = preset.note;
+      } else {
+        if (state.model.value === 'custom') {
+          state.source.value = ''; state.priceDate.value = new Date().toISOString().slice(0,10); state.inputRate.value = ''; state.outputRate.value = '';
+          $('modelNote').textContent = 'Registra tarifas por millón de tokens, su fuente y la fecha de consulta. Los valores no se verifican automáticamente.';
+        } else $('modelNote').textContent = 'Las tarifas precargadas se aplican al uso de API. Selecciona un modelo para ver sus condiciones.';
+        $('officialRateLink').href = 'https://developers.openai.com/api/docs/pricing'; $('officialRateLink').textContent = 'Consultar tarifas oficiales de API ↗';
+      }
+      calculate();
+    }
+    function fxMessage(message, kind = '') { $('fxStatus').innerHTML = `<span class="status-dot ${kind}"></span>${message}`; }
+    function cachedRate(code) {
+      try {
+        const item = JSON.parse(localStorage.getItem(`fx-usd-${code}`));
+        if (!item || !Number.isFinite(item.rate) || Date.now() - item.savedAt > FX_CACHE_HOURS * 3600000) return null;
+        return item;
+      } catch { return null; }
+    }
+    function updateCurrencyUI(options = {}) {
+      const code = currency();
+      $('customCurrencyField').hidden = state.currency.value !== 'custom';
+      state.fxRate.readOnly = code === 'USD';
+      $('loadFx').disabled = code === 'USD' || !/^[A-Z]{3}$/.test(code);
+      const changed = code !== lastCurrency;
+      if (code === 'USD') { state.fxRate.value = 1; fxMessage('USD es la moneda base; no requiere conversión.', 'ok'); }
+      else if (/^[A-Z]{3}$/.test(code)) {
+        const cache = cachedRate(code);
+        if (cache) {
+          state.fxRate.value = cache.rate;
+          fxMessage(`1 USD = ${cache.rate} ${code} · tasa guardada de ${cache.date} · ${cache.source || 'fuente externa'}.`, 'ok');
+        } else if (changed) {
+          state.fxRate.value = '';
+          fxMessage('Buscando automáticamente una tasa de referencia…', 'wait');
+        }
+      } else { state.fxRate.value = ''; fxMessage('Escribe un código ISO de tres letras para consultar el tipo de cambio.', 'wait'); }
+      lastCurrency = code;
+      calculate();
+      if (code !== 'USD' && /^[A-Z]{3}$/.test(code) && state.autoFx.checked && (!cachedRate(code) || options.force)) loadExchangeRate();
+    }
+    async function fetchWithTimeout(url, milliseconds = 6500) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), milliseconds);
+      try {
+        const response = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+      } finally { clearTimeout(timeout); }
+    }
+    async function resolveExchangeRate(code) {
+      const providers = [
+        async () => {
+          const data = await fetchWithTimeout('https://open.er-api.com/v6/latest/USD');
+          const rate = data.rates && data.rates[code];
+          if (data.result !== 'success' || !Number.isFinite(rate)) throw new Error('Sin tasa en ExchangeRate-API');
+          return { rate, date: data.time_last_update_utc || new Date().toISOString().slice(0, 10), source: 'ExchangeRate-API' };
+        },
+        async () => {
+          const data = await fetchWithTimeout('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json');
+          const rate = data.usd && data.usd[code.toLowerCase()];
+          if (!Number.isFinite(rate)) throw new Error('Sin tasa en Currency API');
+          return { rate, date: data.date || new Date().toISOString().slice(0, 10), source: 'Currency API vía jsDelivr' };
+        },
+        async () => {
+          const data = await fetchWithTimeout(`https://api.frankfurter.app/latest?from=USD&to=${encodeURIComponent(code)}`);
+          const rate = data.rates && data.rates[code];
+          if (!Number.isFinite(rate)) throw new Error('Sin tasa en Frankfurter');
+          return { rate, date: data.date, source: 'Frankfurter/ECB' };
+        }
+      ];
+      const errors = [];
+      for (const provider of providers) {
+        try { return await provider(); }
+        catch (error) { errors.push(error.message); }
+      }
+      throw new Error(errors.join(' · '));
+    }
+    async function loadExchangeRate() {
+      const code = currency();
+      if (!/^[A-Z]{3}$/.test(code) || code === 'USD') return;
+      const requestId = ++fxRequest;
+      const button = $('loadFx'); button.disabled = true; button.textContent = 'Consultando…';
+      fxMessage('Consultando una tasa de referencia externa…', 'wait');
+      try {
+        const data = await resolveExchangeRate(code); const rate = data.rate;
+        if (requestId !== fxRequest || currency() !== code) return;
+        state.fxRate.value = rate;
+        localStorage.setItem(`fx-usd-${code}`, JSON.stringify({ rate, date: data.date, savedAt: Date.now(), source: data.source }));
+        fxMessage(`1 USD = ${rate} ${code} · ${data.date} · ${data.source}.`, 'ok');
+      } catch (error) {
+        if (requestId !== fxRequest) return;
+        const previous = num(state.fxRate);
+        fxMessage(previous > 0 ? 'No se pudo actualizar; se conserva la tasa disponible. Puedes editarla manualmente.' : 'No se pudo obtener la tasa. Ingresa manualmente cuántas unidades equivalen a 1 USD.', 'error');
+      } finally { if (requestId === fxRequest) { button.textContent = 'Actualizar cambio'; button.disabled = false; calculate(); } }
+    }
+    function loadExample() {
+      setWorkMode('auto', { skipSave: true });
+      state.project.value = 'Asistente de atención al cliente';
+      state.audience.value = 'Dirección de Operaciones';
+      $('projectFile').value = ''; projectFileMeta = null; setProjectFileStatus('Ningún archivo cargado.');
+      selectCatalogModel('gpt-5.4'); applyModel();
+      state.inputText.value = 'Clasifica la consulta del cliente, identifica su intención y redacta una respuesta breve, clara y amable. Consulta: Necesito cambiar la fecha de devolución de mi reservación.';
+      state.outputText.value = 'Intención: modificación de reservación. Respuesta sugerida: Con gusto te ayudo a revisar el cambio de fecha. Comparte tu número de reservación y la nueva fecha de devolución para validar disponibilidad y cualquier ajuste de precio.';
+      state.useManual.checked = false; $('manualTokens').classList.remove('active');
+      state.volumeMode.value = 'quick'; state.volume.value = 10000; state.comparisonVolume.value = '10000'; state.fixedRate.value = 0; state.budget.value = 50; state.budgetPeriod.value = 'mes'; updateVolumeUI();
+      state.roiEnabled.checked = true; state.implementationCost.value = 500; state.minutesSaved.value = 3; state.hourlyCost.value = 180; state.automationRate.value = 70; state.additionalBenefit.value = 0; state.roiPeriods.value = 12;
+      state.showProjectChart.checked = true;
+      state.currency.value = 'USD'; lastCurrency = ''; updateCurrencyUI(); calculate();
+      const base = comparisonSnapshot();
+      if (base) {
+        const pilot = {...base, name:'Piloto de 1,000 operaciones', volume:1000, total:base.perCall*1000, totalUsd:base.perCallUsd*1000, roi:null, savedAt:new Date().toISOString()};
+        const expansion = {...base, name:'Expansión a 100,000 operaciones', volume:100000, total:base.perCall*100000, totalUsd:base.perCallUsd*100000, roi:null, savedAt:new Date().toISOString()};
+        $('demoComparisonNotice').hidden = false;
+        comparedProjects=[pilot,expansion]; renderProjectComparison();
+      }
+      $('results-section').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    }
+    function calculate() {
+      updateEstimates();
+      const tokens = tokenValues();
+      const inputRate = num(state.inputRate), outputRate = num(state.outputRate), fixed = num(state.fixedRate), volume = Math.max(1, integer(state.volume)), exchange = fx();
+      const sourceReady = state.source.value.trim() && state.priceDate.value;
+      const ratesReady =
+        (tokens.input === 0 || state.inputRate.value !== '') &&
+        (tokens.output === 0 || state.outputRate.value !== '') &&
+        inputRate >= 0 && outputRate >= 0;
+      const tokensReady = tokens.input > 0 || tokens.output > 0;
+      const inputCost = tokens.input * inputRate / 1000000;
+      const outputCost = tokens.output * outputRate / 1000000;
+      const perCallUsd = inputCost + outputCost + fixed;
+      const perCall = perCallUsd * exchange;
+      const total = perCall * volume;
+      const budget = Math.max(0, num(state.budget));
+      const budgetUsage = budget > 0 ? total / budget * 100 : null;
+      const budgetCapacity = budget > 0 && perCall > 0 ? Math.floor(budget / perCall) : null;
+      const growthRate = Math.max(0, num(state.growthRate));
+      const growthPeriods = Math.max(1, integer(state.growthPeriods));
+      const variable = inputCost + outputCost;
+      const totalForShares = perCallUsd || 1;
+      const currencyReady = currency() === 'USD' || (exchange > 0 && /^[A-Z]{3}$/.test(currency()));
+      const ready = ratesReady && tokensReady && currencyReady;
+      const period = scenarioPeriod();
+      updateExperienceStatus({ ready, tokensReady, ratesReady, currencyReady, volume, period, total });
+      const currentResult = ready ? { tokens, inputRate, outputRate, fixed, volume, exchange, inputCost, outputCost, perCallUsd, perCall, total, sourceReady, budget, budgetUsage, budgetCapacity, period, growthActive:state.growthEnabled.checked, growthRate, growthPeriods } : null;
+      $('roiCostLabel').textContent = `Costo de IA ${period.suffix}`;
+      $('roiBenefitLabel').textContent = `Ahorro estimado ${period.suffix}`;
+      $('roiNetLabel').textContent = `Valor neto ${period.suffix}`;
+
+      $('projectCost').textContent = ready ? money(total) : '—';
+      $('volumeLabel').textContent = `${volume.toLocaleString('es-MX')} llamadas ${period.suffix}`;
+      $('perCall').textContent = ready ? money(perCall, 6) : '—';
+      $('tokenTotal').textContent = tokensReady ? `${(tokens.input + tokens.output).toLocaleString('es-MX')}` : '—';
+      $('outputShare').textContent = variable > 0 ? `${(outputCost / variable * 100).toFixed(1)}%` : '—';
+      $('tokenStatus').textContent = tokensReady ? tokens.status : 'Pendiente';
+      $('budgetUsage').textContent = ready && budgetUsage !== null ? `${budgetUsage.toFixed(1)}%` : '—';
+      $('budgetCapacity').textContent = ready && budgetCapacity !== null ? `${budgetCapacity.toLocaleString('es-MX')} ${period.compact}` : '—';
+      $('budgetBlock').hidden = !(ready && budget > 0);
+      if (ready && budget > 0) {
+        const bar = $('budgetBar'), shown = Math.min(100, budgetUsage);
+        bar.style.width = `${shown}%`; bar.className = budgetUsage > 100 ? 'over' : budgetUsage >= 80 ? 'warn' : '';
+        $('budgetBlock').querySelector('[role="progressbar"]').setAttribute('aria-valuenow', budgetUsage.toFixed(1));
+        $('budgetStatus').textContent = budgetUsage > 100 ? `Excede ${money(total - budget)} ${period.suffix}` : `Disponible ${period.suffix}: ${money(budget - total)}`;
+      }
+      $('compositionValue').textContent = ready ? money(perCall, 6) : '—';
+      $('inputBar').style.width = `${inputCost / totalForShares * 100}%`;
+      $('outputBar').style.width = `${outputCost / totalForShares * 100}%`;
+      $('fixedBar').style.width = `${fixed / totalForShares * 100}%`;
+      renderRows(ready ? perCall : 0);
+
+      const growthActive = state.growthEnabled.checked;
+      $('growthControls').hidden = !growthActive;
+      $('growthCard').hidden = !(ready && growthActive);
+      if (ready && growthActive) {
+        const points = [0]; for (let period = 1; period <= growthPeriods; period++) points.push(period);
+        const projections = points.map(period => ({ period, calls: Math.round(volume * Math.pow(1 + growthRate / 100, period)) }));
+        const maxCalls = Math.max(...projections.map(point => point.calls),1);
+        $('growthCard').querySelector('header strong').textContent = period.value === 'proyecto' ? 'Proyección de llamadas y costo del proyecto' : `Proyección ${period.adjective} de llamadas y costo`;
+        $('growthSummary').textContent = `Crecimiento compuesto: ${growthRate.toFixed(0)}% por ${period.singular} · horizonte: ${growthPeriods} ${growthPeriods === 1 ? period.singular : period.plural}`;
+        $('growthBars').innerHTML = projections.map(point => `<div class="growth-row"><span>${point.period === 0 ? period.current : `${period.singular.charAt(0).toUpperCase()+period.singular.slice(1)} ${point.period}`}</span><div class="growth-track"><span style="width:${point.calls/maxCalls*100}%"></span></div><strong>${point.calls.toLocaleString('es-MX')} llamadas · ${money(perCall*point.calls,2)}</strong></div>`).join('');
+      }
+
+      const reading = executiveReading(currentResult);
+      $('executiveInsight').innerHTML = `<strong>${escapeHtml(reading.title)}</strong>${escapeHtml(reading.text)}`;
+
+      const audit = $('audit');
+      if (!ratesReady || !tokensReady || !currencyReady) {
+        audit.className = 'audit warn';
+        audit.innerHTML = `<strong>Estado: pendiente</strong>${!currencyReady ? 'Completa una moneda válida y su tipo de cambio.' : 'Ingresa tokens o texto y, al menos, una tarifa por millón.'}`;
+        $('resultSubtitle').textContent = 'Completa tarifas, textos o tokens manuales.';
+      } else if (!sourceReady || !state.model.value) {
+        audit.className = 'audit warn';
+        audit.innerHTML = `<strong>Estado: aprobado con reservas</strong>El cálculo funciona, pero falta ${!state.model.value ? 'modelo' : ''}${!state.model.value && !sourceReady ? ' y ' : ''}${!sourceReady ? 'fuente o fecha de tarifas' : ''}.`;
+        $('resultSubtitle').textContent = 'Cálculo listo; completa evidencia para trazabilidad.';
+      } else {
+        audit.className = 'audit';
+        audit.innerHTML = `<strong>Estado: ${tokens.status === 'Manual' ? 'aprobado' : 'aprobado con reservas'}</strong>${tokens.status === 'Manual' ? 'Tokens manuales, modelo y tarifas documentados.' : 'Los tokens son estimados localmente; valida con el tokenizador del proveedor.'}`;
+        $('resultSubtitle').textContent = `${state.model.value} · tarifas consultadas el ${state.priceDate.value.split('-').reverse().join('/')}`;
+      }
+      lastResult = currentResult;
+      $('downloadReport').disabled = !lastResult;
+      $('exportCsv').disabled = !lastResult;
+      renderRoi();
+      renderComparison();
+      renderProjectComparison();
+      scheduleSave();
+    }
+    const PROJECT_MAX_BYTES = 25 * 1024 * 1024;
+    const PROJECT_TEXT_PATTERN = /\.(txt|md|json|csv|html?|xml|ya?ml)$/i;
+    function setProjectFileStatus(message, stateName='neutral') {
+      const status = $('projectFileStatus');
+      status.textContent = `${stateName === 'error' ? '⚠ ' : stateName === 'success' ? '✓ ' : stateName === 'loading' ? '… ' : ''}${message}`;
+      if (stateName === 'neutral') status.removeAttribute('data-state');
+      else status.dataset.state = stateName;
+      status.setAttribute('role', stateName === 'error' ? 'alert' : 'status');
+    }
+    function composeProjectBundle(entries, bundleName) {
+      const texts = entries.filter(entry => typeof entry.content === 'string');
+      if (texts.length === 1) return texts[0].content;
+      const title = bundleName.replace(/\.(zip)$/i,'').replace(/[-_]+/g,' ');
+      const sections = texts.map(entry => {
+        const base = entry.name.split(/[\\/]/).pop();
+        if (/(^|[-_. ])(input|prompt|entrada)([-_. ]|$)/i.test(base)) return `# Input\n${entry.content}`;
+        if (/(^|[-_. ])(output|response|respuesta|salida)([-_. ]|$)/i.test(base)) return `# Output\n${entry.content}`;
+        return `# Archivo: ${entry.name}\n${entry.content}`;
+      });
+      return `Proyecto: ${title}\n\n${sections.join('\n\n')}`;
+    }
+    async function unzipProject(file) {
+      const bytes = new Uint8Array(await file.arrayBuffer()), view = new DataView(bytes.buffer);
+      let eocd = -1;
+      for (let i = Math.max(0, bytes.length - 65557); i <= bytes.length - 22; i++) if (view.getUint32(i,true) === 0x06054b50) eocd = i;
+      if (eocd < 0) throw new Error('ZIP no reconocido.');
+      const count = view.getUint16(eocd + 10,true), centralOffset = view.getUint32(eocd + 16,true);
+      let offset = centralOffset, total = 0; const entries = [];
+      for (let index=0; index<count; index++) {
+        if (view.getUint32(offset,true) !== 0x02014b50) throw new Error('Directorio ZIP dañado.');
+        const flags=view.getUint16(offset+8,true), method=view.getUint16(offset+10,true), compressed=view.getUint32(offset+20,true), uncompressed=view.getUint32(offset+24,true), nameLength=view.getUint16(offset+28,true), extraLength=view.getUint16(offset+30,true), commentLength=view.getUint16(offset+32,true), localOffset=view.getUint32(offset+42,true);
+        const name=new TextDecoder('utf-8').decode(bytes.slice(offset+46,offset+46+nameLength));
+        offset += 46 + nameLength + extraLength + commentLength;
+        if (name.endsWith('/') || !PROJECT_TEXT_PATTERN.test(name)) continue;
+        if (flags & 1) throw new Error('Los ZIP con contraseña no son compatibles.');
+        total += uncompressed; if (total > PROJECT_MAX_BYTES) throw new Error('El contenido descomprimido supera 25 MB.');
+        const localName=view.getUint16(localOffset+26,true), localExtra=view.getUint16(localOffset+28,true), start=localOffset+30+localName+localExtra;
+        const packed=bytes.slice(start,start+compressed); let unpacked;
+        if (method===0) unpacked=packed;
+        else if (method===8 && typeof DecompressionStream!=='undefined') unpacked=new Uint8Array(await new Response(new Blob([packed]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+        else throw new Error('El método de compresión del ZIP no es compatible con este navegador.');
+        entries.push({name,content:new TextDecoder('utf-8').decode(unpacked),isImage:false});
+      }
+      return entries;
+    }
+    function applyProjectContent(content, displayName, size, methodLabel='archivo') {
+      const detected = detectProjectData(content, displayName);
+      projectFileMeta = { name: displayName, size, content, isImage: false, detected };
+      state.project.value = detected.title || state.project.value;
+      if (detected.audience) setAudience(detected.audience);
+      if (detected.volume && Number(detected.volume) > 0) {
+        state.volume.value = Math.round(Number(detected.volume));
+        if (['1000','10000','1000000'].includes(String(state.volume.value))) { state.volumeMode.value='quick'; state.comparisonVolume.value=String(state.volume.value); }
+        else state.volumeMode.value='custom';
+        updateVolumeUI({sync:false});
+      }
+      if (detected.budget && Number(detected.budget) >= 0) state.budget.value=Number(detected.budget);
+      if (state.useProjectFileAsInput.checked) {
+        if (detected.input) state.inputText.value=detected.input;
+        if (detected.output) state.outputText.value=detected.output;
+        const found=[detected.input?'input':'',detected.output?'output':''].filter(Boolean).join(' y ');
+        setProjectFileStatus(`${displayName} · ${methodLabel}. ${found?`Se identificó ${found}.`:'No se identificaron secciones de input/output; revisa el archivo o completa los campos manualmente.'}`, found ? 'success' : 'error');
+      } else setProjectFileStatus(`${displayName} · cargado como referencia; no se aplicó el contenido.`, 'success');
+      updateEstimates(); calculate();
+    }
+    async function loadProjectFile(event) {
+      const input = event?.currentTarget || $('projectFile');
+      const file = input.files[0];
+      projectFileMeta = null;
+      if (!file) { setProjectFileStatus('Ningún archivo cargado.'); return; }
+      const allowed = /\.(txt|md|json|csv|html?|xml|ya?ml|zip)$/i.test(file.name);
+      if (!allowed) {
+        setProjectFileStatus('No se pudo cargar: formato no compatible. Usa TXT, MD, JSON, CSV, HTML, XML, YAML, ZIP o una carpeta con esos archivos.', 'error');
+        input.value = ''; return;
+      }
+      if (file.size > PROJECT_MAX_BYTES) {
+        setProjectFileStatus('No se pudo cargar: el archivo supera 25 MB. Selecciona uno más pequeño.', 'error');
+        input.value = ''; return;
+      }
+      try {
+        if (!state.project.value.trim() || workMode() === 'auto') state.project.value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g,' ');
+        if (/\.zip$/i.test(file.name)) {
+          setProjectFileStatus(`${file.name} · descomprimiendo localmente…`, 'loading');
+          const entries=await unzipProject(file), textEntries=entries.filter(entry=>typeof entry.content==='string'), content=composeProjectBundle(entries,file.name);
+          if (!entries.length) throw new Error('El ZIP no contiene archivos compatibles.');
+          applyProjectContent(content,file.name,file.size,`ZIP leído localmente · ${entries.length} archivos compatibles`); return;
+        }
+        const content = await file.text();
+        applyProjectContent(content,file.name,file.size,detectProjectData(content,file.name).method);
+      } catch (error) {
+        projectFileMeta = null; input.value = '';
+        setProjectFileStatus(`No fue posible leer el proyecto. ${error.message || 'Verifica el formato y vuelve a intentarlo.'}`, 'error');
+      }
+    }
+    async function loadProjectFolder() {
+      const input=$('projectFolder'), files=Array.from(input.files||[]), total=files.reduce((sum,file)=>sum+file.size,0);
+      projectFileMeta=null;
+      if (!files.length) return;
+      if (total>PROJECT_MAX_BYTES) { setProjectFileStatus('No se pudo cargar: la carpeta supera 25 MB.', 'error'); input.value=''; return; }
+      const compatible=files.filter(file=>PROJECT_TEXT_PATTERN.test(file.name));
+      const entries=[];
+      for (const file of compatible) entries.push({name:file.webkitRelativePath||file.name,content:await file.text(),isImage:false});
+      if (!compatible.length) { setProjectFileStatus('No se pudo cargar: la carpeta no contiene archivos TXT, MD, JSON, CSV, HTML, XML o YAML.', 'error'); input.value=''; return; }
+      const folderName=(files[0].webkitRelativePath||'carpeta').split('/')[0], content=composeProjectBundle(entries,folderName);
+      applyProjectContent(content,folderName,total,`carpeta leída localmente · ${compatible.length} archivos compatibles`);
+    }
+    async function loadText(fileInput, target, kind) {
+      const file = fileInput.files[0];
+      if (!file) { calculate(); return; }
+      if (file.size > 5 * 1024 * 1024) { alert('El archivo supera 5 MB. Carga uno más pequeño.'); fileInput.value = ''; return; }
+      if (!/\.(txt|md|json|csv)$/i.test(file.name)) { alert('Formato no compatible. Usa TXT, MD, JSON o CSV.'); fileInput.value = ''; return; }
+      target.value = await file.text();
+      updateEstimates(); calculate();
+    }
+    function reset() {
+      $('demoComparisonNotice').hidden = true;
+      document.querySelectorAll('input, textarea').forEach(el => { if (el.type === 'file') el.value = ''; else if (el.type === 'checkbox') el.checked = false; else if (el.id === 'volume') el.value = 1000; else if (el.id === 'fixedRate') el.value = 0; else el.value = ''; });
+      projectFileMeta = null; setProjectFileStatus('Ningún archivo cargado.');
+      localStorage.removeItem(AUTOSAVE_KEY);
+      selectCatalogModel('gpt-5.4'); state.currency.value = 'USD'; state.autoFx.checked = true; state.autoSave.checked = true; state.useProjectFileAsInput.checked = true; state.volumeMode.value = 'quick'; state.comparisonVolume.value = '1000'; state.volume.value = 1000; state.budgetPeriod.value = 'proyecto'; state.fxRate.value = 1; state.roiPeriods.value = 12; state.automationRate.value = 100; lastCurrency = ''; $('manualTokens').classList.remove('active'); updateAudienceUI(); updateVolumeUI(); setWorkMode('auto', { skipSave: true }); applyModel(); updateCurrencyUI(); setSaveStatus('Nueva sesión iniciada.');
+    }
+    function escapeHtml(value) { return String(value || '').replace(/[&<>\"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[char])); }
+    function exportComparisonCsv() {
+      if (!lastResult) return;
+      const csvValue = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+      const headers = ['Modelo','Proveedor','Referencia','Costo por llamada','Costo del proyecto','Diferencia absoluta','Diferencia porcentual','Moneda','Volumen'];
+      const rows = visibleComparisonData().sort((a,b) => a.total-b.total).map(row => [row.label,row.provider,row.reference?'Sí':'No',row.perCall.toFixed(8),row.total.toFixed(2),row.difference.toFixed(2),row.percentage === null ? '' : row.percentage.toFixed(2),currency(),lastResult.volume]);
+      const csv = '\uFEFF' + [headers, ...rows].map(row => row.map(csvValue).join(',')).join('\r\n');
+      downloadBlob(csv, 'text/csv;charset=utf-8', `${projectSlug()}-comparativo.csv`);
+    }
+    function completeReportProjectPage(project, index) {
+      const details = project.details || null;
+      const reading = savedProjectReading(project);
+      const value = project.roi ? `<h2>Evaluación de valor</h2><div class="kpis"><div class="kpi"><b>Ahorro por periodo</b><br>${moneyFor(project.roi.benefitPerPeriod,project.currency,2)}</div><div class="kpi"><b>Valor neto por periodo</b><br>${moneyFor(economicValuePerPeriod(project.roi,project.total),project.currency,2)}</div><div class="kpi"><b>Recuperación</b><br>${project.roi.payback === null ? 'No recuperable' : `${project.roi.payback.toFixed(1)} periodos`}</div></div>` : '';
+      const evidence = details ? `<table><tr><th>Destinatario</th><td>${escapeHtml(details.audience)}</td></tr><tr><th>Temática</th><td>${escapeHtml(reading.theme.label)}</td></tr><tr><th>Modo</th><td>${escapeHtml(details.mode)}</td></tr><tr><th>Tokens</th><td>${Number(details.inputTokens).toLocaleString('es-MX')} de entrada + ${Number(details.outputTokens).toLocaleString('es-MX')} de salida · ${escapeHtml(details.tokenStatus)}</td></tr><tr><th>Tarifas API</th><td>USD ${Number(details.inputRate).toFixed(4)}/M de entrada · USD ${Number(details.outputRate).toFixed(4)}/M de salida · cargo fijo USD ${Number(details.fixedRate).toFixed(6)}</td></tr><tr><th>Fuente y fecha</th><td>${escapeHtml(details.source || 'No documentada')} · ${escapeHtml(reportDate(details.priceDate))}</td></tr></table>` : '<div class="note">Proyecto guardado antes de la ampliación del informe. Se conserva el resultado económico disponible, pero no es posible reconstruir tokens, tarifas y fuente sin inventar datos.</div>';
+      const evidenceWarning = details && !String(details.source || '').trim() ? '<div class="note"><strong>Tarifa personalizada sin fuente documentada.</strong> El cálculo se conserva como escenario declarado por el usuario, pero la tarifa debe verificarse antes de utilizar el resultado para presupuestar o decidir.</div>' : '';
+      const scales = [[1,'Por llamada'],[1000,'1,000 llamadas'],[10000,'10,000 llamadas'],[1000000,'1,000,000 llamadas']].map(([n,label]) => `<tr><td>${label}</td><td>${moneyFor(project.perCall*n,project.currency,n===1?6:2)}</td><td>${hasUsdBase(project) ? moneyFor(project.perCallUsd*n,'USD',n===1?6:2) : 'No disponible'}</td></tr>`).join('');
+      return `<section class="report-page"><header style="background:${reading.theme.primary}"><span>Proyecto ${index + 1} · ${escapeHtml(reading.theme.label)}</span><h1>${escapeHtml(project.name)}</h1><p>${escapeHtml(project.model)} · para ${escapeHtml(reading.audience)}</p></header><h2>${escapeHtml(reading.theme.results)}</h2><div class="kpis"><div class="kpi"><b>Costo en moneda seleccionada</b><br>${moneyFor(project.total,project.currency,2)}</div><div class="kpi"><b>Costo base en USD</b><br>${hasUsdBase(project) ? moneyFor(project.totalUsd,'USD',2) : 'No disponible'}</div><div class="kpi"><b>Volumen</b><br>${project.volume.toLocaleString('es-MX')} llamadas</div><div class="kpi"><b>Costo por llamada</b><br>${moneyFor(project.perCall,project.currency,6)}</div></div><h2>${escapeHtml(reading.theme.focus)}</h2><div class="note" style="background:${reading.theme.soft};border-left-color:${reading.theme.accent}">${escapeHtml(reading.text)}</div><h2>Evidencia y configuración</h2>${evidence}${evidenceWarning}<h2>Escalamiento</h2><table><thead><tr><th>Escala</th><th>${escapeHtml(project.currency)}</th><th>USD</th></tr></thead><tbody>${scales}</tbody></table>${value}<div class="note">Tipo de cambio: ${escapeHtml(project.fxSource || 'No disponible')} · ${escapeHtml(reportDate(project.fxDate))}. Las tarifas son de API; no implican equivalencia de calidad entre modelos.</div></section>`;
+    }
+    async function downloadFullReport() {
+      if (!lastResult || !comparedProjects.length) return;
+      if (projectNormalizationPending) { alert('La calculadora aún está normalizando los tipos de cambio. Espera unos segundos y vuelve a descargar.'); return; }
+      await normalizeStoredProjects();
+      const projects = [comparisonSnapshot(),...comparedProjects];
+      const pages = projects.map(completeReportProjectPage).join('');
+      const theme = reportTheme();
+      const comparison = `<section class="report-page comparison-page" style="border-top:0;background:#f8f9ff"><header style="background:#3f4f9d"><span>Comparación final</span><h1>Comparativo de proyectos</h1><p>${projects.length} proyectos evaluados</p></header>${projectComparisonReportHtml({forceChart:true})}</section>`;
+      const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Informe comparativo de proyectos de IA</title><style>@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#172033;max-width:980px;margin:0 auto;padding:24px;line-height:1.45}.report-page{min-height:950px;break-after:page;page-break-after:always;padding:8px}.report-page:last-child{break-after:auto;page-break-after:auto}header{background:${theme.primary};color:white;padding:24px;border-radius:12px}header span{font-size:12px;text-transform:uppercase;letter-spacing:.08em}header h1{margin:5px 0}header p{margin:0}h2{margin-top:24px}h3{margin-top:18px}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.kpi{border:1px solid #dce3e8;padding:14px;border-radius:8px}table{border-collapse:collapse;width:100%;table-layout:auto}thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{padding:9px;border-bottom:1px solid #dce3e8;text-align:left;vertical-align:top;font-size:12px;overflow-wrap:anywhere}th{background:#f3f6f8;font-weight:700}.note{margin-top:16px;background:${theme.soft};padding:12px;border-left:4px solid ${theme.accent}}.comparison-page{border-top:6px solid #6d547e;background:#fbf9fc;padding:14px}.comparison-page>header{background:#4b3f67}.comparison-page h2,.comparison-page h3{color:#3f3157}.comparison-table{table-layout:fixed}.comparison-table th,.comparison-table td{font-size:9.5px;padding:7px 6px}.comparison-table th:nth-child(1){width:18%}.comparison-table th:nth-child(2){width:15%}.comparison-table th:nth-child(3){width:13%}.comparison-table th:nth-child(4){width:15%}.comparison-table th:nth-child(5){width:11%}.comparison-table th:nth-child(6){width:14%}.comparison-table th:nth-child(7){width:14%}.trace-table th,.trace-table td{font-size:10px;padding:7px}.trace-table th:nth-child(1){width:28%}.trace-table th:nth-child(2){width:10%}.trace-table th:nth-child(3){width:20%}.trace-table th:nth-child(4){width:27%}.trace-table th:nth-child(5){width:15%}.report-bar{display:grid;grid-template-columns:170px 1fr 100px;gap:10px;align-items:center;margin:8px 0;font-size:11px}.report-bar-track{height:13px;background:#e7e1eb;border-radius:8px;overflow:hidden}.report-bar-track span{display:block;height:100%;background:#705985}.report-bar strong{text-align:right}@media(max-width:650px){.kpis{grid-template-columns:1fr}.report-page{min-height:auto}.report-bar{grid-template-columns:1fr}.report-bar strong{text-align:left}.comparison-table,.trace-table{table-layout:auto}}@media print{body{padding:0}.report-page{min-height:auto}.comparison-page{background:#fff}.comparison-table th,.comparison-table td{font-size:8.5pt}.trace-table th,.trace-table td{font-size:8.5pt}}</style></head><body>${pages}${comparison}</body></html>`;
+      downloadBlob(html,'text/html;charset=utf-8',`${projectSlug('comparativo-proyectos')}-informe-completo-${new Date().toISOString().slice(0,10)}.html`);
+    }
+    function downloadReport() {
+      if (!lastResult) return;
+      if (!audienceValue()) {
+        alert('Selecciona para quién es el informe antes de descargarlo. Así la lectura y el destinatario quedan definidos.');
+        state.audience.focus();
+        return;
+      }
+      const downloadButton = $('downloadReport');
+      const r = lastResult, preset = RATE_CATALOG[state.model.value];
+      const model = preset ? preset.label : 'Tarifa personalizada';
+      const status = r.tokens.status === 'Manual' && r.sourceReady ? 'Aprobado' : 'Aprobado con reservas';
+      const rows = [[1,'Por llamada'],[1000,'1,000 llamadas'],[10000,'10,000 llamadas'],[1000000,'1,000,000 llamadas']].map(([n,label]) => `<tr><td>${label}</td><td>${money(r.perCall*n,n===1?6:2)}</td></tr>`).join('');
+      const comparisonReportRows = visibleComparisonData().sort((a,b) => a.total-b.total).map(row => `<tr><td>${escapeHtml(row.label)}${row.reference ? ' (referencia)' : ''}</td><td>${money(row.perCall,6)}</td><td>${money(row.total,2)}</td><td>${row.reference ? '—' : `${row.difference > 0 ? '+' : ''}${money(row.difference,2)}`}</td><td>${row.reference || row.percentage === null ? '—' : `${row.percentage > 0 ? '+' : ''}${row.percentage.toFixed(1)}%`}</td></tr>`).join('');
+      const budgetRow = r.budget > 0 ? `<tr><th>Presupuesto del periodo</th><td>${money(r.budget,2)} por ${escapeHtml(r.period.label)} · uso ${r.budgetUsage.toFixed(1)}% · capacidad ${r.budgetCapacity.toLocaleString('es-MX')} llamadas</td></tr>` : '';
+      const roi = roiMetrics(r);
+      const roiReport = roi ? `<h2>Evaluación de valor</h2><div class="kpis"><div class="kpi"><b>Costo de IA por ${escapeHtml(r.period.label)}</b><br>${money(r.total,2)}</div><div class="kpi"><b>Ahorro estimado por ${escapeHtml(r.period.label)}</b><br>${money(roi.benefitPerPeriod,2)}</div><div class="kpi"><b>Valor neto por ${escapeHtml(r.period.label)}</b><br>${money(roi.operatingNet,2)}</div><div class="kpi"><b>Recuperación de inversión</b><br>${roi.payback === null ? 'No recuperable' : `${roi.payback.toFixed(1)} periodos`}</div></div><div class="note">Estimación basada en minutos ahorrados, costo laboral y volumen declarados por el usuario. No constituye un beneficio garantizado.</div>` : '';
+      const theme = reportTheme();
+      const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(theme.title)}</title><style>body{font-family:Arial,sans-serif;color:#172033;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.5}header{background:${theme.primary};color:white;padding:28px;border-radius:12px}h1{margin:0 0 8px}h2{margin-top:28px}table{border-collapse:collapse;width:100%}th,td{padding:10px;border-bottom:1px solid #dce3e8;text-align:left}.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.kpi{border:1px solid #dce3e8;padding:14px;border-radius:8px}.note{background:${theme.soft};padding:14px;border-left:4px solid ${theme.accent}}@media(max-width:600px){.kpis{grid-template-columns:1fr}}</style></head><body><header><h1>${escapeHtml(theme.title)}</h1><div>${escapeHtml(state.project.value || 'Proyecto sin nombre')} · generado ${new Date().toLocaleString('es-MX')}</div></header><h2>${escapeHtml(theme.configuration)}</h2><table><tr><th>Destinatario</th><td>${escapeHtml(audienceValue() || 'No especificado')}</td></tr><tr><th>Temática</th><td>${theme.label}</td></tr><tr><th>Archivo del proyecto</th><td>${escapeHtml(projectFileMeta ? projectFileMeta.name : 'No adjunto')}</td></tr><tr><th>Modo</th><td>${workMode() === 'auto' ? 'Autónomo' : 'Manual'}</td></tr><tr><th>Modelo</th><td>${escapeHtml(model)}</td></tr><tr><th>Fuente de tarifa</th><td>${escapeHtml(state.source.value)}</td></tr><tr><th>Fecha de consulta</th><td>${escapeHtml(state.priceDate.value)}</td></tr><tr><th>Moneda</th><td>${escapeHtml(currency())}</td></tr><tr><th>Conversión</th><td>1 USD = ${r.exchange} ${escapeHtml(currency())}</td></tr><tr><th>Tokens</th><td>${r.tokens.input.toLocaleString('es-MX')} input + ${r.tokens.output.toLocaleString('es-MX')} output (${r.tokens.status})</td></tr>${budgetRow}</table><h2>${escapeHtml(theme.results)}</h2><div class="kpis"><div class="kpi"><b>Costo por llamada</b><br>${money(r.perCall,6)}</div><div class="kpi"><b>Costo del proyecto</b><br>${money(r.total,2)} · ${r.volume.toLocaleString('es-MX')} llamadas</div></div><h2>${escapeHtml(theme.focus)}</h2><div class="note">${escapeHtml(thematicReading(r, theme))}</div>${roiReport}<h2>Escalamiento</h2><table><thead><tr><th>Escala</th><th>Costo</th></tr></thead><tbody>${rows}</tbody></table><h2>Comparativo entre modelos</h2><table><thead><tr><th>Modelo</th><th>Por llamada</th><th>Proyecto</th><th>Diferencia</th><th>Diferencia %</th></tr></thead><tbody>${comparisonReportRows}</tbody></table><h2>Supuestos y límites</h2><div class="note">Estado: ${status}. Las tarifas corresponden a API y están expresadas por millón de tokens. Los tokens ${r.tokens.status === 'Manual' ? 'fueron ingresados manualmente' : 'son una estimación local de 1.3 tokens por palabra'}. No incluye impuestos, descuentos, caché, herramientas, imágenes, audio ni razonamiento facturable. La conversión monetaria es referencial y debe verificarse antes de presupuestar. El comparativo mantiene el mismo conteo de tokens entre proveedores sólo como escenario económico; no demuestra equivalencia de calidad ni de tokenización.</div></body></html>`;
+      const slug = projectSlug('informe-costo-ia');
+      downloadBlob(html, 'text/html;charset=utf-8', `${slug}-${state.reportTheme.value}-${new Date().toISOString().slice(0,10)}.html`);
+      setSaveStatus('Informe descargado. Revisa la carpeta de descargas del navegador.');
+      downloadButton.textContent = '✓ Informe descargado';
+      setTimeout(() => { downloadButton.textContent = '↓ Descargar informe'; }, 2200);
+    }
+    const comparisonHelp = document.querySelector('#economics-section .project-help');
+    const comparisonHelpPanel = comparisonHelp?.querySelector('.project-help-panel');
+    if (comparisonHelp && comparisonHelpPanel) {
+      comparisonHelpPanel.setAttribute('role','dialog');
+      comparisonHelpPanel.setAttribute('aria-modal','true');
+      comparisonHelpPanel.setAttribute('aria-label','Cómo comparar proyectos');
+      const closeHelp = document.createElement('button');
+      closeHelp.type = 'button'; closeHelp.className = 'help-close'; closeHelp.setAttribute('aria-label','Cerrar ayuda'); closeHelp.textContent = '×';
+      comparisonHelpPanel.prepend(closeHelp);
+      closeHelp.addEventListener('click', () => { comparisonHelp.open = false; comparisonHelp.querySelector('summary').focus(); });
+      comparisonHelp.addEventListener('toggle', () => { if (comparisonHelp.open) requestAnimationFrame(() => closeHelp.focus()); });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && comparisonHelp.open) { comparisonHelp.open = false; comparisonHelp.querySelector('summary').focus(); } else if (event.key === 'Tab' && comparisonHelp.open) { event.preventDefault(); closeHelp.focus(); } });
+      document.addEventListener('click', event => { if (comparisonHelp.open && event.target === comparisonHelp) { comparisonHelp.open = false; comparisonHelp.querySelector('summary').focus(); } });
+    }
+    state.useManual.addEventListener('change', () => { $('manualTokens').classList.toggle('active', state.useManual.checked); calculate(); });
+    state.inputFile = $('inputFile'); state.outputFile = $('outputFile');
+    state.projectFile = $('projectFile');
+    state.projectFolder = $('projectFolder');
+    state.projectZip = $('projectZip');
+    state.projectFile.addEventListener('change', loadProjectFile);
+    state.projectZip.addEventListener('change', loadProjectFile);
+    state.projectFolder.addEventListener('change', loadProjectFolder);
+    state.useProjectFileAsInput.addEventListener('change', () => {
+      if (!projectFileMeta) return;
+      if (state.useProjectFileAsInput.checked) {
+        const detected = projectFileMeta.detected || detectProjectData(projectFileMeta.content, projectFileMeta.name);
+        if (detected.input) state.inputText.value = detected.input;
+        if (detected.output) state.outputText.value = detected.output;
+        setProjectFileStatus(`${projectFileMeta.name} · contenido detectado aplicado.`, 'success');
+        updateEstimates(); calculate();
+      } else setProjectFileStatus(`${projectFileMeta.name} · ${(projectFileMeta.size / 1024).toFixed(1)} KB · cargado como referencia.`, 'success');
+    });
+    state.inputFile.addEventListener('change', () => loadText(state.inputFile, state.inputText, 'input'));
+    state.outputFile.addEventListener('change', () => loadText(state.outputFile, state.outputText, 'output'));
+    state.modelProvider.addEventListener('change', () => {
+      populateModelSelect(state.modelProvider.value);
+      if (state.modelProvider.value === 'Personalizado') state.model.value = 'custom';
+      applyModel();
+    });
+    state.model.addEventListener('change', () => {
+      if (state.model.value === 'custom') state.modelProvider.value = 'Personalizado';
+      applyModel();
+    });
+    state.audience.addEventListener('change', () => { updateAudienceUI(); calculate(); });
+    state.currency.addEventListener('change', () => updateCurrencyUI());
+    state.customCurrency.addEventListener('input', () => { clearTimeout(customFxTimer); customFxTimer = setTimeout(() => updateCurrencyUI(), 450); });
+    state.autoFx.addEventListener('change', () => { if (state.autoFx.checked) updateCurrencyUI({ force: true }); });
+    state.fxRate.addEventListener('input', () => { if (currency() !== 'USD' && num(state.fxRate) > 0) fxMessage(`Tipo de cambio manual: 1 USD = ${num(state.fxRate)} ${currency()}.`, 'wait'); });
+    $('loadFx').addEventListener('click', () => loadExchangeRate()); $('downloadReport').addEventListener('click', downloadReport);
+    $('loadExampleTop').addEventListener('click', loadExample);
+    $('toggleValueModule').addEventListener('click', () => {
+      const enable = !state.roiEnabled.checked;
+      state.roiEnabled.checked = enable;
+      valueModuleExpanded = enable;
+      calculate(); scheduleSave();
+      if (enable) $('valueSectionBody').scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+    $('toggleProjectsModule').addEventListener('click', () => { projectsModuleExpanded = $('projectsSectionBody').hidden; updateModuleVisibility(); });
+    $('modeAuto').addEventListener('change', () => setWorkMode('auto'));
+    $('modeManual').addEventListener('change', () => setWorkMode('manual'));
+    $('importConfig').addEventListener('click', () => $('configFile').click());
+    $('configFile').addEventListener('change', importProject);
+    $('exportConfig').addEventListener('click', exportProject);
+    $('exportCsv').addEventListener('click', exportComparisonCsv);
+    $('downloadFullReport').addEventListener('click', downloadFullReport);
+    $('addComparisonProject').addEventListener('click', saveComparedProject);
+    $('comparisonMode').addEventListener('change', () => { comparisonSelectionCollapsed = false; updateComparisonSelectionUI(); renderComparison(); });
+    $('comparisonSort').addEventListener('change', renderComparison);
+    $('comparisonProviderChoices').addEventListener('change', event => { const checkbox=event.target.closest('input[type="checkbox"]'); if(!checkbox) return; checkbox.checked ? selectedComparisonProviders.add(checkbox.value) : selectedComparisonProviders.delete(checkbox.value); renderProviderChoices(); renderComparison(); });
+    $('selectAllProviders').addEventListener('click', () => { selectedComparisonProviders = new Set(catalogProviders()); renderProviderChoices(); renderComparison(); });
+    $('clearProviders').addEventListener('click', () => { selectedComparisonProviders.clear(); renderProviderChoices(); renderComparison(); });
+    $('comparisonModelChoices').addEventListener('change', event => { const checkbox=event.target.closest('input[type="checkbox"]'); if(!checkbox) return; checkbox.checked ? customComparisonModels.add(checkbox.value) : customComparisonModels.delete(checkbox.value); renderComparison(); });
+    $('selectRecommendedModels').addEventListener('click', () => { customComparisonModels = new Set(RECOMMENDED_MODELS); renderComparisonModelChoices(); renderComparison(); });
+    $('selectAllModels').addEventListener('click', () => { customComparisonModels = new Set(Object.keys(RATE_CATALOG)); renderComparisonModelChoices(); renderComparison(); });
+    $('clearModels').addEventListener('click', () => { customComparisonModels.clear(); renderComparisonModelChoices(); renderComparison(); });
+    $('applyModelSelection').addEventListener('click', applyComparisonSelection);
+    $('editComparisonSelection').addEventListener('click', () => { comparisonSelectionCollapsed = false; updateComparisonSelectionUI(); ($('comparisonMode').value === 'custom' ? $('comparisonModelPicker') : $('comparisonProviderPanel')).scrollIntoView({ behavior:'smooth', block:'center' }); });
+    $('savedProjectSlots').addEventListener('click', event => { const button=event.target.closest('.remove-compared-project'); if(button) removeComparedProject(Number(button.dataset.index)); });
+    $('clearProjectComparison').addEventListener('click', () => { $('demoComparisonNotice').hidden = true; comparedProjects=[]; localStorage.removeItem(PROJECT_COMPARE_KEY); renderProjectComparison(); });
+    state.autoSave.addEventListener('change', () => { if (state.autoSave.checked) saveSession(); else { localStorage.removeItem(AUTOSAVE_KEY); setSaveStatus('Guardado automático desactivado.'); } });
+    state.volumeMode.addEventListener('change', () => updateVolumeUI());
+    state.comparisonVolume.addEventListener('change', () => { state.volume.value = state.comparisonVolume.value; calculate(); });
+    document.querySelectorAll('input, textarea, select').forEach(el => el.addEventListener('input', () => { calculate(); scheduleSave(); }));
+    $('reset').addEventListener('click', reset);
+    state.priceDate.value = new Date().toISOString().slice(0, 10);
+    document.body.classList.add('mode-auto');
+    initializeModelControls();
+    updateComparisonSelectionUI();
+    updateModuleVisibility();
+    restoreComparedProjects();
+    if (!restoreSession()) { selectCatalogModel('gpt-5.4'); applyModel(); updateCurrencyUI(); updateVolumeUI(); calculate(); }
+  </script>
+</body>
+</html>
