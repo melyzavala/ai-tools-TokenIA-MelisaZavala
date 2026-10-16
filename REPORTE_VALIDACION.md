@@ -3,7 +3,7 @@
 **Fecha:** 16 de octubre de 2026  
 **Responsable funcional:** Melisa Zavala  
 **Apoyo técnico y de control de calidad:** ChatGPT / Codex  
-**Estado actual:** aprobado localmente con validación pública pendiente
+**Estado actual:** aprobado con reservas documentadas
 
 ## 1. Objetivo y alcance
 
@@ -19,7 +19,7 @@ La validación cubre:
 - accesibilidad y responsividad básicas;
 - seguridad y privacidad;
 - compatibilidad estructural con GitHub Pages;
-- disponibilidad pública, pendiente hasta la publicación autorizada.
+- disponibilidad y comportamiento esencial desde la URL pública.
 
 No se valida la calidad real de los modelos ni la vigencia futura de sus tarifas.
 
@@ -114,7 +114,7 @@ Las imágenes, PDF, DOCX y archivos binarios no se anuncian como compatibles.
 | Descarga de informe, CSV y JSON | Aprobado |
 | Restablecimiento y guardado local | Aprobado |
 
-La suite confirma presencia, unicidad y conexión declarada de los manejadores. La ejecución visual completa en navegador se realizará nuevamente sobre la URL pública.
+La suite confirma presencia, unicidad y conexión declarada de los manejadores. La validación pública confirmó cálculo, actualización de resultados, comparativo y descarga de informe.
 
 ## 5. APIs y recursos externos
 
@@ -125,7 +125,7 @@ Servicios configurados:
 - `api.frankfurter.app`
 - Google Fonts para Poppins
 
-Se confirmó respuesta JSON válida de `open.er-api.com` durante la auditoría. El entorno de terminal local restringe DNS externo y la herramienta web no pudo consultar los otros dos servicios; esto no demuestra una falla de los servicios. Su carga y CORS quedan como pruebas obligatorias desde GitHub Pages.
+Se confirmó desde GitHub Pages una conversión de USD a MXN obtenida mediante ExchangeRate-API, con fuente, fecha y valor visibles. Los proveedores de respaldo permanecen validados estructuralmente, pero no fueron forzados en producción porque el proveedor principal respondió correctamente.
 
 ## 6. Accesibilidad y responsividad
 
@@ -141,13 +141,14 @@ Verificaciones aprobadas:
 - reglas para escritorio, pantalla media y móvil;
 - respeto de `prefers-reduced-motion`.
 
-Pendiente después de publicar:
+Verificaciones públicas adicionales:
 
-- inspección a 390 × 844 px;
-- comprobación de desbordamiento horizontal;
-- navegación completa sólo con teclado;
-- descarga real en navegador;
-- carga de archivos mediante selector del navegador.
+- vista de 390 × 844 px sin desbordamiento horizontal: aprobada;
+- descarga real de informe HTML: aprobada;
+- informe con temática operativa y audiencia Dirección de Operaciones: aprobado;
+- consola del navegador sin errores ni advertencias: aprobada;
+- navegación exhaustiva sólo con teclado: no ejecutada;
+- carga pública mediante selector del navegador: no concluida; los parsers y fixtures sí aprobaron la suite automática.
 
 ## 7. Correcciones durante la validación
 
@@ -170,23 +171,23 @@ Se corrigió únicamente la suite y se repitió completa hasta obtener 35 aproba
 - La evaluación de valor depende de supuestos humanos y no constituye un beneficio garantizado.
 - GitHub Pages es público; cualquier archivo incorporado al repositorio será visible para terceros.
 
-## 9. Pruebas públicas obligatorias después de publicar
+## 9. Evidencia de validación pública
 
-1. Abrir la URL de Pages y confirmar HTTP 200.
-2. Comprobar carga de Poppins o fallback legible.
-3. Cargar el ejemplo y verificar recálculo.
-4. Cambiar proveedor, modelo, volumen, periodo, moneda, audiencia y temática.
-5. Verificar actualización integral de KPIs, tabla y narrativas.
-6. Ejecutar la actualización de tipo de cambio desde la URL pública.
-7. Cargar TXT, JSON, XML, YAML, ZIP y carpeta.
-8. Probar mensajes de error por formato incompatible y tamaño.
-9. Descargar informes de las tres temáticas, CSV y configuración JSON.
-10. Activar y desactivar evaluación de valor y revisar su inclusión condicional.
-11. Guardar proyectos y descargar comparativo completo.
-12. Revisar escritorio y móvil, teclado, foco y ausencia de desbordamientos.
+| Comprobación | Evidencia | Resultado |
+|---|---|---|
+| URL de Pages | La aplicación abrió con título `Calculadora de Costos de IA` | Aprobada |
+| Cálculo automático | 20 tokens estimados y USD 1.38 para 10,000 llamadas | Aprobada |
+| Comparativo | Tabla pública con OpenAI, Anthropic/Claude, Google/Gemini, DeepSeek, Perplexity y Mistral | Aprobada |
+| Tipo de cambio | 1 USD = 18.457205 MXN, ExchangeRate-API, 16/10/2026 | Aprobada |
+| Informe | Archivo `prueba-publica-de-validacion-operational-2026-10-16.html` descargado | Aprobada |
+| Personalización | Título operativo, destinatario Dirección de Operaciones y cifras MXN | Aprobada |
+| Vista móvil | 390 px de ancho; contenido de 375 px, sin desbordamiento | Aprobada |
+| Recursos | Sin errores ni advertencias en consola durante la prueba | Aprobada |
+
+Pendientes no bloqueantes: recorrido exhaustivo sólo con teclado y repetición manual de todos los formatos desde el selector público. La lectura de cada formato sí fue validada automáticamente con fixtures sintéticos.
 
 ## 10. Criterio de aprobación
 
-- **Aprobado localmente:** 35 pruebas automáticas, cero fallos.
-- **Publicación:** pendiente de aprobación explícita de la responsable.
-- **Aprobación final:** requiere URL pública operativa y pruebas públicas completas o reservas documentadas.
+- **Pruebas automáticas:** 35 aprobadas, cero fallos.
+- **Publicación:** repositorio público y GitHub Pages activos.
+- **Estado final:** aprobado con reservas por las pruebas manuales exhaustivas pendientes indicadas arriba.
